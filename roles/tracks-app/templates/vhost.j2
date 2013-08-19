@@ -1,0 +1,14 @@
+server {
+  listen 80 default_server;
+  server_name tracks.local;
+
+  root {{ app_location }}/current/public;
+
+  access_log {{ app_location }}/shared/log/nginx-access.log;
+  error_log  {{ app_location }}/shared/log/nginx-error.log;
+
+  passenger_enabled on;
+  passenger_user    deploy;
+  passenger_group   deploy;
+  rack_env          production;
+}

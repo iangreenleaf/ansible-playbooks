@@ -1,0 +1,37 @@
+---
+- name: Restart Nginx with updated vhost configuration
+  action: service name=nginx state=restarted
+
+- name: Symlink the log directory to the shared location
+  file: path={{ app_location }}/current/log
+        src={{ app_location }}/shared/log
+        state=link
+        force=yes
+  sudo: yes
+  sudo_user: deploy
+
+- name: Symlink the tmp directory to the shared location
+  file: path={{ app_location }}/current/tmp
+        src={{ app_location }}/shared/tmp
+        state=link
+        force=yes
+  sudo: yes
+  sudo_user: deploy
+
+- name: restart mysql
+  action: service name=mysql enabled=yes state=restarted
+
+#TODO
+- name: Install the bundle
+  shell: RBENV_ROOT=${rbenv_root} rbenv exec bundle install --deployment --path {{ app_location }}/shared/bundle
+         chdir={{ app_location }}/current
+  sudo: yes
+  sudo_user: deploy
+
+#TODO do this natively, I think
+- name: restart tracks
+  command: "{{ item }}"
+  sudo: yes
+  sudo_user: deploy
+  with_items:
+    - touch {{ app_location }}/current/tmp/restart.txt

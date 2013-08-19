@@ -3,22 +3,19 @@
   apt: pkg=libcurl4-openssl-dev
        state=present
 
+#TODO this fails because it needs an rbenv rehash
 - name: Install Passenger
-  command: "{{ ruby_location }}/bin/gem install passenger -v {{ passenger_version }}
-            creates={{ ruby_location }}/bin/passenger-install-nginx-module"
+  command: "{{ ruby_bin }}/gem install passenger -v {{ passenger_version }}
+            creates={{ ruby_bin }}/passenger-install-nginx-module"
 
-- name: Make Passenger symlinks
-  file: path=/usr/local/bin/{{ item }}
-        src={{ ruby_location }}/bin/{{ item }}
-        state=link
-  with_items:
-    - passenger-memory-stats
-    - passenger-status
+#TODO this is duplicated all over the place
+- name: rbenv rehash
+  shell: RBENV_ROOT=${rbenv_root} rbenv rehash
 
 - name: Download the Nginx source code
   get_url: url=http://nginx.org/download/nginx-1.4.1.tar.gz
            dest=/usr/local/src/
-           sha256sum=bca5d1e89751ba29406185e1736c390412603a7e6b604f5b4575281f6565d119
+           #sha256sum=bca5d1e89751ba29406185e1736c390412603a7e6b604f5b4575281f6565d119
 
 - name: Generate the Nginx install script on the server
   template: src=install-nginx.j2

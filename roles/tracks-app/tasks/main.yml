@@ -1,0 +1,71 @@
+---
+- name: install sqlite3
+  apt: pkg={{item}} state=present
+  with_items:
+    - sqlite3
+    - libsqlite3-dev
+
+- name: install mysql
+  apt: pkg={{item}} state=present
+  with_items:
+    - mysql-server
+    - mysql-client
+    - libmysql-ruby
+    - libmysqlclient-dev
+    - python-mysqldb # So Ansible can access it
+  notify: restart mysql
+
+- name: create mysql db
+  action: mysql_db name=tracks
+
+- name: create mysql user
+  action: mysql_user name=tracks password= priv=tracks.*:ALL
+
+- name: Generate the tracks virtual host and restart Nginx if it is updated
+  template: src=vhost.j2
+            dest=/etc/nginx/sites-available/tracks
+            mode=755
+  notify: Restart Nginx with updated vhost configuration
+
+- name: Enable the tracks virtual host
+  file: path=/etc/nginx/sites-enabled/tracks
+        src=/etc/nginx/sites-available/tracks
+        state=link
+
+- name: Create the application directories
+  file: path={{ item }}
+        owner=deploy
+        group=deploy
+        state=directory
+  with_items:
+    - "{{ app_location }}"
+    - "{{ app_location }}/shared"
+    - "{{ app_location }}/shared/bundle"
+    - "{{ app_location }}/shared/log"
+    - "{{ app_location }}/shared/tmp"
+
+- name: Check out the latest revision of the codebase and notify the proper handlers if there have been updates
+  git: repo=https://github.com/TracksApp/tracks.git
+       dest={{ app_location }}/current
+  sudo: yes
+  sudo_user: deploy
+  notify:
+    #- Symlink the log directory to the shared location
+    - Symlink the tmp directory to the shared location
+    - Install the bundle
+    - restart tracks
+
+#TODO fix that random seed in the template
+- name: set up the application config
+  template: src=site.yml.j2 dest={{ app_location }}/current/config/site.yml
+  sudo: yes
+  sudo_user: deploy
+  notify: restart tracks
+
+- name: set up the database config
+  sudo: yes
+  sudo_user: deploy
+  template: src=database.yml.j2 dest={{ app_location }}/current/config/database.yml
+
+#TODO rake assets:precompile # notify restart app
+#TODO rake db:migrate

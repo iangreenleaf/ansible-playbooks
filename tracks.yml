@@ -1,0 +1,11 @@
+---
+- hosts: digitalocean
+  user: root
+  roles:
+    - common
+    - deploy-user
+    #- ssh
+    #- ruby-falcon
+    - rbenv
+    - nginx-passenger
+    - tracks-app

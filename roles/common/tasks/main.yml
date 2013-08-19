@@ -1,6 +1,6 @@
 ---
 - name: Upgrade apt packages
-  apt: upgrade=yes
+  apt: upgrade=safe
        update_cache=yes
 
 - name: Install git

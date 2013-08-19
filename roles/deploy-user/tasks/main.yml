@@ -15,4 +15,4 @@
                   state=present
                   key="{{ item }}"
   with_items:
-    - ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBC3jdO0ojv6W28wA95qJQexaFNMtVte1xEASeNTAPgyjTqzojZ3cINVXbZS55UD83upMJd5jugohfKp+k/Dus+Y= jlund@Mal
+    - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAvA1bzs7tZ7QVjrYfqKNQTdv8RwyIAkQoEGnpbfg+/PG8/LvCzLTwTu9Y+b21E0vIkRBb4vfzkwYB23BprKOYghBKh7zPVeaSq4QGG9rKmcc+788Qmgb9ZUzqExTte+Q4FfIHB7lwZ2BgAPtGfb92+k69Rgk5YJfz2LYkGsHcfr5hW+sC+cVGnz2IwamlRO/zUUCpP52Mts+s3XGnm2fxHNlrgpZUDaDNv8tXjr4FPjB/JpozJG3La8DyZmTUd1iyOvaPe4H2nvHDM1rLb1fzhjdgOjlAwhZu2SdOrDYWN5IzwmTTmto1RzfAdgiHgY4qLHyTXuLx9Ircvdn9w2Kw/w== youngian@guevara
