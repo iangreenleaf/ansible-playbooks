@@ -2,6 +2,10 @@
 - name: Restart Nginx with updated vhost configuration
   action: service name=nginx state=restarted
 
+- name: Remove the log directory
+  file: path={{ app_location }}/current/log
+        state=absent
+
 - name: Symlink the log directory to the shared location
   file: path={{ app_location }}/current/log
         src={{ app_location }}/shared/log
@@ -20,13 +24,6 @@
 
 - name: restart mysql
   action: service name=mysql enabled=yes state=restarted
-
-#TODO
-- name: Install the bundle
-  shell: RBENV_ROOT=${rbenv_root} rbenv exec bundle install --deployment --path {{ app_location }}/shared/bundle
-         chdir={{ app_location }}/current
-  sudo: yes
-  sudo_user: deploy
 
 #TODO do this natively, I think
 - name: restart tracks

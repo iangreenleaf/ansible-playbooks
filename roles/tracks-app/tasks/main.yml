@@ -51,9 +51,17 @@
   sudo: yes
   sudo_user: deploy
   notify:
-    #- Symlink the log directory to the shared location
+    - Remove the log directory
+    - Symlink the log directory to the shared location
     - Symlink the tmp directory to the shared location
-    - Install the bundle
+    - restart tracks
+
+- name: Install the bundle
+  shell: RBENV_ROOT=${rbenv_root} rbenv exec bundle install --deployment --path {{ app_location }}/shared/bundle
+         chdir={{ app_location }}/current
+  sudo: yes
+  sudo_user: deploy
+  notify:
     - restart tracks
 
 - name: set up the application config
