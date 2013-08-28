@@ -55,7 +55,6 @@
     - Install the bundle
     - restart tracks
 
-#TODO fix that random seed in the template
 - name: set up the application config
   template: src=site.yml.j2 dest={{ app_location }}/current/config/site.yml
   sudo: yes

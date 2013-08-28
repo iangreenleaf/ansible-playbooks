@@ -1,3 +1,4 @@
 .vagrant
 ansible_hosts
 Vagrantfile
+secrets.yml
