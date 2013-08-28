@@ -47,6 +47,7 @@
 - name: Check out the latest revision of the codebase and notify the proper handlers if there have been updates
   git: repo=https://github.com/TracksApp/tracks.git
        dest={{ app_location }}/current
+       version=6681df9530d1fb27104ac5438b552f26ce8d1bca
   sudo: yes
   sudo_user: deploy
   notify:
