@@ -11,61 +11,38 @@
     - libxslt1-dev
     - zlib1g-dev
 
-- name: install rbenv from git
+- name: check out rbenv from git
   git: repo=git://github.com/sstephenson/rbenv.git dest=$rbenv_root version=v0.4.0
 
-- name: add rbenv to path
-  file: path=/usr/local/bin/rbenv src=${rbenv_root}/bin/rbenv state=link
+- name: install ruby-build
+  git: repo=git://github.com/sstephenson/ruby-build.git dest=${rbenv_root}/plugins/ruby-build
 
 - name: add rbenv initialization to profile
   template: src=rbenv.sh.j2 dest=/etc/profile.d/rbenv.sh owner=root group=root mode=0755
 
-- name: check ruby-build installed
-  command: test -x /usr/local/bin/ruby-build
-  register: rbuild_present
-  ignore_errors: yes
+- name: source rbenv init in non-interactive shells
+  lineinfile: dest=/etc/bash.bashrc
+              state=present
+              regexp='profile.d/rbenv.sh'
+              insertbefore=BOF
+              line="source /etc/profile.d/rbenv.sh"
+  notify:
+    - source rbenv config file
+    - rbenv rehash
 
-- name: create temporary directory
-  when_failed: $rbuild_present
-  command: mktemp -d
-  register: tempdir
-
-- name: clone ruby-build repo
-  when_failed: $rbuild_present
-  git: repo=git://github.com/sstephenson/ruby-build.git dest=${tempdir.stdout}/ruby-build
-
-- name: install ruby-build
-  when_failed: $rbuild_present
-  command: ./install.sh chdir=${tempdir.stdout}/ruby-build
-
-- name: remove temporary directory
-  when_failed: $rbuild_present
-  file: path=${tempdir.stdout} state=absent
-
-- name: check ruby $ruby_version installed
-  shell: RBENV_ROOT=${rbenv_root} rbenv versions | grep $ruby_version
-  register: ruby_installed
-  ignore_errors: yes
+# Source config file right away
+- meta: flush_handlers
 
 - name: install ruby $ruby_version
-  when_failed: $ruby_installed
-  shell: RBENV_ROOT=${rbenv_root} rbenv install $ruby_version
+  shell: rbenv install $ruby_version
+         creates=${rbenv_root}/versions/${ruby_version}
+  environment: "{{ruby_env}}"
 
 - name: set global ruby $ruby_version
-  when_failed: $ruby_installed
-  shell: RBENV_ROOT=${rbenv_root} rbenv global $ruby_version
-
-- name: rbenv rehash
-  when_failed: $ruby_installed
-  shell: RBENV_ROOT=${rbenv_root} rbenv rehash
+  when: make_global_ruby
+  shell: rbenv global ${ruby_version}
 
 - name: install bundler
-  #TODO
-  #gem: name=bundler state=latest
-  command: "{{ ruby_bin }}/gem install bundler
-            creates={{ ruby_bin }}/bundle"
-
-
-#TODO fix
-- name: rbenv rehash
-  shell: RBENV_ROOT=${rbenv_root} rbenv rehash
+  gem: name=bundler state=latest
+  notify: rbenv rehash
+  environment: "{{ruby_env}}"
