@@ -3,14 +3,13 @@
   apt: pkg=libcurl4-openssl-dev
        state=present
 
-#TODO this fails because it needs an rbenv rehash
 - name: Install Passenger
-  command: "{{ ruby_bin }}/gem install passenger -v {{ passenger_version }}
-            creates={{ ruby_bin }}/passenger-install-nginx-module"
+  gem: name=passenger state=present version={{passenger_version}}
+  environment: "{{ruby_env}}"
+  notify: rbenv rehash
 
-#TODO this is duplicated all over the place
-- name: rbenv rehash
-  shell: RBENV_ROOT=${rbenv_root} rbenv rehash
+# Need that rbenv rehash to take effect
+- meta: flush_handlers
 
 - name: Download the Nginx source code
   get_url: url=http://nginx.org/download/nginx-1.4.1.tar.gz
@@ -25,6 +24,7 @@
 - name: Run the Nginx install script
   command: /usr/local/src/install-nginx.sh
            creates=/opt/nginx/sbin/nginx
+  environment: "{{ruby_env}}"
 
 - name: Generate the Nginx configuration file and restart the service if it has been updated
   template: src=nginx-conf.j2
