@@ -15,12 +15,6 @@
     - python-mysqldb # So Ansible can access it
   notify: restart mysql
 
-- name: create mysql db
-  action: mysql_db name=tracks
-
-- name: create mysql user
-  action: mysql_user name=tracks password= priv=tracks.*:ALL
-
 - name: Generate the tracks virtual host and restart Nginx if it is updated
   template: src=vhost.j2
             dest=/etc/nginx/sites-available/tracks
@@ -44,6 +38,13 @@
     - "{{ app_location }}/shared/log"
     - "{{ app_location }}/shared/tmp"
 
+- name: create mysql db
+  action: mysql_db name=tracks
+  notify: Initialize the database
+
+- name: create mysql user
+  action: mysql_user name=tracks password= priv=tracks.*:ALL
+
 - name: Check out the latest revision of the codebase and notify the proper handlers if there have been updates
   git: repo=https://github.com/TracksApp/tracks.git
        dest={{ app_location }}/current
@@ -54,6 +55,8 @@
     - Remove the log directory
     - Symlink the log directory to the shared location
     - Symlink the tmp directory to the shared location
+    - Migrate the database
+    - Precompile assets
     - restart tracks
 
 - name: Set local ruby version
@@ -72,9 +75,6 @@
     - rbenv rehash
     - restart tracks
 
-# Need that rbenv rehash to take effect
-- meta: flush_handlers
-
 - name: set up the application config
   template: src=site.yml.j2 dest={{ app_location }}/current/config/site.yml
   sudo: yes
@@ -85,6 +85,3 @@
   sudo: yes
   sudo_user: deploy
   template: src=database.yml.j2 dest={{ app_location }}/current/config/database.yml
-
-#TODO rake assets:precompile # notify restart app
-#TODO rake db:migrate
