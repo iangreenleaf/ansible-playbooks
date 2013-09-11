@@ -12,6 +12,9 @@
 - name: Install Vim
   apt: pkg=vim
 
+- name: Install screen
+  apt: pkg=screen
+
 - name: Install prerequisite packages that are necessary to compile applications
   apt: pkg={{ item }}
   with_items:
