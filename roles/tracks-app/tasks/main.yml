@@ -57,12 +57,10 @@
     - restart tracks
 
 - name: Set local ruby version
-  shell: $rbenv_root/bin/rbenv local {{ ruby_version }}
-         chdir={{ app_location }}/current
-         creates=.ruby-version
-  environment: "{{ruby_env}}"
-  sudo: yes
-  sudo_user: deploy
+  template: src=roles/rbenv/templates/.ruby-version.j2
+            dest={{ app_location }}/current/.ruby-version
+            owner=deploy
+            group=deploy
 
 - name: Install the bundle
   shell: $ruby_bin/bundle install --deployment --path {{ app_location }}/shared/bundle
