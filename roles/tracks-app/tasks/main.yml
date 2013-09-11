@@ -56,13 +56,26 @@
     - Symlink the tmp directory to the shared location
     - restart tracks
 
-- name: Install the bundle
-  shell: RBENV_ROOT=${rbenv_root} rbenv exec bundle install --deployment --path {{ app_location }}/shared/bundle
+- name: Set local ruby version
+  shell: $rbenv_root/bin/rbenv local {{ ruby_version }}
          chdir={{ app_location }}/current
+         creates=.ruby-version
+  environment: "{{ruby_env}}"
+  sudo: yes
+  sudo_user: deploy
+
+- name: Install the bundle
+  shell: $ruby_bin/bundle install --deployment --path {{ app_location }}/shared/bundle
+         chdir={{ app_location }}/current
+  environment: "{{ruby_env}}"
   sudo: yes
   sudo_user: deploy
   notify:
+    - rbenv rehash
     - restart tracks
+
+# Need that rbenv rehash to take effect
+- meta: flush_handlers
 
 - name: set up the application config
   template: src=site.yml.j2 dest={{ app_location }}/current/config/site.yml

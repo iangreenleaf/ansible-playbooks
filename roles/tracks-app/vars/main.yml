@@ -1,2 +1,3 @@
 ---
 app_location: "/var/www/tracks"
+ruby_version: 1.9.3-p385
