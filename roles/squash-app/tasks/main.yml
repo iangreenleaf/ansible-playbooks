@@ -126,12 +126,6 @@
     - rbenv rehash
     - Restart the app
 
-- name: set up the application config
-  template: src=site.yml.j2 dest={{ app_location }}/current/config/site.yml
-  sudo: yes
-  sudo_user: deploy
-  notify: Restart the app
-
 - name: set up the database config
   sudo: yes
   sudo_user: deploy
