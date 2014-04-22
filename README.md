@@ -5,3 +5,13 @@
 Contains bits and pieces from other generous souls.
 
 This is all the explanation you're gonna get for the moment.
+
+## Deploy ##
+
+### Dev ###
+
+    ansible-playbook tracks.yml -i ./ansible_hosts
+
+### Prod ###
+
+    ansible-playbook tracks.yml

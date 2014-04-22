@@ -1,0 +1,8 @@
+---
+app_location: "/var/www/squash"
+ruby_version: 1.9.3-p385
+domain: squash.iangreenleaf.com
+dbname: squash
+dbuser: squash
+# In secrets.yml
+#dbpassword: abcd

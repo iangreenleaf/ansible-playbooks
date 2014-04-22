@@ -1,0 +1,138 @@
+---
+- name: install java (for Closure)
+  apt: pkg={{item}} state=present
+  with_items:
+    - openjdk-6-jre
+
+- name: install postgres
+  apt: pkg={{item}} state=present
+  with_items:
+    - postgresql
+    - libpq-dev
+    - python-psycopg2 # So Ansible can access it
+
+- name: ensure database is created
+  postgresql_db: name={{dbname}}
+  sudo: yes
+  sudo_user: postgres
+
+- name: ensure user has access to database
+  postgresql_user: db={{dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL
+  sudo: yes
+  sudo_user: postgres
+
+- name: ensure user does not have unnecessary privilege
+  postgresql_user: name={{dbuser}} role_attr_flags=NOSUPERUSER,NOCREATEDB
+  sudo: yes
+  sudo_user: postgres
+
+- name: Generate the virtual host and restart Nginx if it is updated
+  template: src=vhost.j2
+            dest=/etc/nginx/sites-available/squash
+            mode=755
+  notify: Restart Nginx
+
+- name: Enable the virtual host
+  file: path=/etc/nginx/sites-enabled/squash
+        src=/etc/nginx/sites-available/squash
+        state=link
+
+- name: Create the application directories
+  file: path={{ item }}
+        owner=deploy
+        group=deploy
+        state=directory
+  with_items:
+    - "{{ app_location }}"
+    - "{{ app_location }}/shared"
+    - "{{ app_location }}/shared/bundle"
+    - "{{ app_location }}/shared/log"
+    - "{{ app_location }}/shared/tmp"
+    - "{{ app_location }}/current"
+
+- name: Check out the latest revision of the codebase
+  git: repo=https://github.com/SquareSquash/web.git
+       dest={{ app_location }}/current
+       version=master
+  sudo: yes
+  sudo_user: deploy
+  notify:
+    - Remove the log directory
+    - Symlink the log directory to the shared location
+    #- Symlink the tmp directory to the shared location
+    - Migrate the database
+    - Precompile assets
+    - Restart the app
+
+- name: Set local ruby version
+  template: src=roles/rbenv/templates/.ruby-version.j2
+            dest={{ app_location }}/current/.ruby-version
+            owner=deploy
+            group=deploy
+
+- name: Secret token
+  template: src=secret_token.rb.j2
+            dest={{ app_location }}/current/config/initializers/secret_token.rb
+            owner=deploy
+            group=deploy
+
+- name: Auth settings
+  template: src=authentication.yml.j2
+            dest={{ app_location }}/current/config/environments/common/authentication.yml
+            owner=deploy
+            group=deploy
+
+- name: Common mailer settings
+  template: src=mailer_common.yml.j2
+            dest={{ app_location }}/current/config/environments/common/mailer.yml
+            owner=deploy
+            group=deploy
+
+- name: Mailer settings
+  template: src=mailer.yml.j2
+            dest={{ app_location }}/current/config/environments/production/mailer.yml
+            owner=deploy
+            group=deploy
+
+- name: Disable SSL redirect
+  lineinfile: dest={{ app_location }}/current/config/environments/production.rb
+           state=present
+           regexp="\bconfig\.force_ssl\s*=\s*true\b"
+           line="config.force_ssl = false"
+
+- name: Replace SSL ping
+  lineinfile: dest={{ app_location }}/current/config/environments/production.rb
+           state=present
+           regexp="config.middleware.insert_before ::ActionDispatch::SSL, Ping"
+           line="config.middleware.insert_before ::Rack::Runtime, Ping"
+
+#- name: No closure compiler
+#rm Gemfile.d/dogfood
+#rmline closure_compiler
+#rm confir/preini.../source_maps
+#update safe_yaml
+#  lineinfile: dest={{ app_location }}/current/config/environments/production.rb
+#           state=present
+#           regexp="\bconfig\.assets\.force_ssl\s*=\s*true\b"
+#           line="config.assets.force_ssl = false"
+
+- name: Install the bundle
+  shell: $ruby_bin/bundle install --deployment --path {{ app_location }}/shared/bundle
+         chdir={{ app_location }}/current
+  environment: "{{ruby_env}}"
+  sudo: yes
+  sudo_user: deploy
+  notify:
+    - rbenv rehash
+    - Restart the app
+
+- name: set up the application config
+  template: src=site.yml.j2 dest={{ app_location }}/current/config/site.yml
+  sudo: yes
+  sudo_user: deploy
+  notify: Restart the app
+
+- name: set up the database config
+  sudo: yes
+  sudo_user: deploy
+  template: src=database.yml.j2 dest={{ app_location }}/current/config/database.yml

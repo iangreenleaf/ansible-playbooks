@@ -1,0 +1,11 @@
+---
+- hosts: digitalocean
+  user: root
+  vars_files:
+    - secrets.yml
+  roles:
+    - common
+    - deploy-user
+    - rbenv
+    - nginx-passenger
+    - squash-app
