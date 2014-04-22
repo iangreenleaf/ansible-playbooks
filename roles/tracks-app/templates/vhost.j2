@@ -1,6 +1,6 @@
 server {
-  listen 80 default_server;
-  server_name tracks.local;
+  listen 80;
+  server_name {{domain}};
 
   root {{ app_location }}/current/public;
 
