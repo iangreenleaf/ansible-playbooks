@@ -1,8 +1,9 @@
 ---
 - name: install java (for Closure)
-  apt: pkg={{item}} state=present
-  with_items:
-    - openjdk-6-jre
+  apt: pkg=openjdk-6-jre state=present
+
+- name: install sendmail
+  apt: pkg=sendmail state=present
 
 - name: install postgres
   apt: pkg={{item}} state=present
