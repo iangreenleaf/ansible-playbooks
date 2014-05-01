@@ -1,0 +1,15 @@
+---
+- name: install ufw
+  apt: pkg=ufw state=present
+
+- name: enable firewall
+  ufw: state=enabled policy=deny logging=on
+
+- name: pass SSH through firewall
+  ufw: rule=allow name=OpenSSH
+
+- name: pass HTTP through firewall
+  ufw: rule=allow port=80 proto=tcp
+
+- name: pass HTTPS through firewall
+  ufw: rule=allow port=443 proto=tcp

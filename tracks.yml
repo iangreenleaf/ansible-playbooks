@@ -5,9 +5,8 @@
     - secrets.yml
   roles:
     - common
+    - firewall
     - deploy-user
-    #- ssh
-    #- ruby-falcon
     - rbenv
     - nginx-passenger
     - tracks-app

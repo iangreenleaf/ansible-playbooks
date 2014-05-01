@@ -5,6 +5,7 @@
     - secrets.yml
   roles:
     - common
+    - firewall
     - deploy-user
     - rbenv
     - nginx-passenger
