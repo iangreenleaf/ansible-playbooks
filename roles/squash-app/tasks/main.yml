@@ -118,8 +118,8 @@
 #           line="config.assets.force_ssl = false"
 
 - name: Install the bundle
-  shell: $ruby_bin/bundle install --deployment --path {{ app_location }}/shared/bundle
-         chdir={{ app_location }}/current
+  shell: "{{ruby_bin}}/bundle install --deployment --path {{ app_location }}/shared/bundle
+         chdir={{ app_location }}/current"
   environment: "{{ruby_env}}"
   sudo: yes
   sudo_user: deploy

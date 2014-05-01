@@ -1,6 +1,6 @@
 ---
 - name: Initialize the database
-  shell: $ruby_bin/rake db:setup
-         chdir={{ app_location }}/current
+  shell: "{{ruby_bin}}/rake db:setup
+         chdir={{ app_location }}/current"
   environment:
     RAILS_ENV: production

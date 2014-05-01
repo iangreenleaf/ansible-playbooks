@@ -23,20 +23,20 @@
   sudo_user: deploy
 
 - name: Initialize the database
-  shell: $ruby_bin/rake db:setup
-         chdir={{ app_location }}/current
+  shell: "{{ruby_bin}}/rake db:setup
+         chdir={{ app_location }}/current"
   environment:
     RAILS_ENV: production
 
 - name: Migrate the database
-  shell: $ruby_bin/rake db:migrate
-         chdir={{ app_location }}/current
+  shell: "{{ruby_bin}}/rake db:migrate
+         chdir={{ app_location }}/current"
   environment:
     RAILS_ENV: production
 
 - name: Precompile assets
-  shell: $ruby_bin/rake assets:precompile
-         chdir={{ app_location }}/current
+  shell: "{{ruby_bin}}/rake assets:precompile
+         chdir={{ app_location }}/current"
   environment:
     RAILS_ENV: production
 
