@@ -1,0 +1,29 @@
+---
+- name: Restart Nginx
+  action: service name=nginx state=restarted
+
+- name: Symlink the database config file
+  file: path={{ app_location }}/current/data/config.php
+        src={{ app_location }}/shared/data/config.php
+        state=link
+  sudo: yes
+  sudo_user: deploy
+
+- name: Symlink the log directory to the shared location
+  file: path={{ app_location }}/current/log
+        src={{ app_location }}/shared/log
+        state=link
+        force=yes
+  sudo: yes
+  sudo_user: deploy
+
+- name: Modify permissions on uploads
+  file: path={{ item }}
+        state=directory
+        mode=0777
+  with_items:
+    - uploads
+    - uploads/thumb
+    - uploads/big
+    - uploads/import
+    - data

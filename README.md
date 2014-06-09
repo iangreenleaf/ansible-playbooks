@@ -8,6 +8,8 @@ This is all the explanation you're gonna get for the moment.
 
 ## Deploy ##
 
+    sudo ansible-galaxy install -r roles.csv
+
 ### Dev ###
 
     ansible-playbook tracks.yml -i ./ansible_hosts

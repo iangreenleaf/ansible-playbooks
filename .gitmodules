@@ -1,0 +1,3 @@
+[submodule "roles/nbz4live.php-fpm"]
+	path = roles/nbz4live.php-fpm
+	url = https://github.com/NBZ4live/ansible-php-fpm.git

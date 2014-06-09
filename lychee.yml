@@ -1,0 +1,39 @@
+---
+# TODO: This playbook is missing nginx entirely
+- hosts: digitalocean
+  user: root
+  vars_files:
+    - secrets.yml
+  roles:
+    - common
+    - firewall
+    - deploy-user
+    - role: nbz4live.php-fpm
+      php_fpm_apt_packages:
+        - php5-fpm
+        - php5-gd
+        - php5-json
+        - php5-mysql
+      php_fpm_pools:
+        - name: lychee
+          user: deploy
+          group: deploy
+          listen: /var/run/php-fpm/lychee.sock
+          pm: dynamic
+          pm.max_children: 5
+          pm.start_servers: 1
+          pm.min_spare_servers: 1
+          pm.max_spare_servers: 3
+          chdir: "{{app_location}}"
+    - role: Ansibles.mysql
+      mysql_root_password: ''
+      mysql_databases:
+        - name: lychee
+          collation: "utf8_general_ci"
+          encoding: "utf8"
+      mysql_users:
+        - name: lychee
+          pass: "4CMepo*NSaN9&m0e"
+          priv: "lychee.*:ALL"
+          host: "localhost"
+    - lychee-app

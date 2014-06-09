@@ -1,0 +1,5 @@
+---
+app_location: "/var/www/lychee"
+domain: lychee.iangreenleaf.com
+lychee_dbname: lychee
+lychee_dbuser: lychee
