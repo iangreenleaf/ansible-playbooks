@@ -30,9 +30,11 @@
     - "{{ app_location }}"
     - "{{ app_location }}/shared"
     - "{{ app_location }}/shared/log"
-    - "{{ app_location }}/shared/tmp"
     - "{{ app_location }}/shared/data"
+    - "{{ app_location }}/shared/uploads"
     - "{{ app_location }}/current"
+  notify:
+    - Modify permissions on uploads
 
 - name: Check out the latest revision of the codebase
   git: repo=https://github.com/electerious/Lychee.git
@@ -41,8 +43,7 @@
   sudo: yes
   sudo_user: deploy
   notify:
-    - Symlink the log directory to the shared location
-    - Symlink the database config file
+    - Symlink the shared directories
     - Modify permissions on uploads
     - restart php-fpm
 
