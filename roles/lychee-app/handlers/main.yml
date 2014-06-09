@@ -18,7 +18,7 @@
   sudo_user: deploy
 
 - name: Modify permissions on uploads
-  file: path={{ item }}
+  file: path={{ app_location }}/{{ item }}
         state=directory
         mode=0777
   with_items:
