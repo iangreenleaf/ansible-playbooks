@@ -24,7 +24,7 @@
           pm.start_servers: 1
           pm.min_spare_servers: 1
           pm.max_spare_servers: 3
-          chdir: "{{app_location}}"
+          chdir: /
     - role: Ansibles.mysql
       mysql_root_password: ''
       mysql_databases:
