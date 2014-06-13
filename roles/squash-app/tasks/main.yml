@@ -107,6 +107,13 @@
            regexp="config.middleware.insert_before ::ActionDispatch::SSL, Ping"
            line="config.middleware.insert_before ::Rack::Runtime, Ping"
 
+- name: Enable CORS
+  lineinfile: >
+    dest={{ app_location }}/current/config/application.rb
+    state=present
+    insertafter='config\.time_zone = '
+    line="config.middleware.use(Rack::Cors) { allow { origins(\"*\"); resource('/api/1.0/notify', :headers => :any, :methods => [:post]) } }"
+
 #- name: No closure compiler
 #rm Gemfile.d/dogfood
 #rmline closure_compiler
