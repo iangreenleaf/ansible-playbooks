@@ -1,0 +1,5 @@
+---
+dependencies:
+  - role: galaxy/jnv.unattended-upgrades
+    unattended_minimal_steps: true
+    unattended_mail: "{{ server_maint_email }}"

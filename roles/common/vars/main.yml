@@ -1,0 +1,3 @@
+---
+vars_files:
+  - secrets.yml
