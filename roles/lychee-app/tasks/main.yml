@@ -1,4 +1,7 @@
 ---
+- name: Install imagemagick
+  apt: pkg=php5-imagick state=present
+
 - name: Create the socket directory
   file: path=/var/run/php-fpm
         owner=deploy
@@ -39,7 +42,7 @@
 - name: Check out the latest revision of the codebase
   git: repo=https://github.com/electerious/Lychee.git
        dest={{ app_location }}/current
-       version=master
+       version=v2.7.0
   sudo: yes
   sudo_user: deploy
   notify:
@@ -51,4 +54,3 @@
   template: src=data-config.php.j2
             dest={{app_location}}/shared/data/config.php
             mode=755
-
