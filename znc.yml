@@ -1,0 +1,20 @@
+---
+- hosts: digitalocean
+  user: root
+  vars_files:
+    - secrets.yml
+  roles:
+    - common
+    - role: firewall
+      extra_ports:
+        - 6667
+    - deploy-user
+    - role: willshersystems.znc
+      znc_user_name: iangreenleaf
+      znc_user_password: "{{znc_password}}"
+      znc_user_nick: iangreenleaf
+      znc_user_realname: Ian Young
+      znc_user_buffer: 1000
+      znc_port: 6667
+      znc_ssl: true
+      znc_ssl_certificate_file: ~/keys/znc.iangreenleaf.com-startssl.pem

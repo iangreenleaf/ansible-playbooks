@@ -1,0 +1,35 @@
+---
+- name: Check OS compatibility
+  assert:
+    that:
+      - ansible_distribution in [ 'Ubuntu' ]
+
+- name: Ubuntu specific configuration
+  include: ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
+
+- name: ZNC user
+  user:
+    name: znc
+    home: "{{ znc_datadir }}"
+    comment: ZNC daemon
+    system: yes
+
+- name: Create directory tree
+  file:
+    path: "{{ znc_config_dir }}"
+    state: directory
+    owner: znc
+    group: znc
+    mode: 0750
+
+- include: config.yml
+
+- include: ssl.yml
+
+# - name: Start ZNC
+#   service:
+#     name: znc
+#     state: started
+#     enabled: yes
+#   when: znc_service == true
