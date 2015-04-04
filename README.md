@@ -8,7 +8,7 @@ This is all the explanation you're gonna get for the moment.
 
 ## Deploy ##
 
-    sudo ansible-galaxy install -r roles.csv
+    ansible-galaxy install -r roles.csv -f -p galaxy
 
 ### Dev ###
 
