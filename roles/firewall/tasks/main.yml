@@ -13,3 +13,7 @@
 
 - name: pass HTTPS through firewall
   ufw: rule=allow port=443 proto=tcp
+
+- name: pass other ports through firewall
+  ufw: rule=allow port={{item}}
+  with_items: "{{extra_ports}}"
