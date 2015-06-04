@@ -1,0 +1,35 @@
+---
+- name: Restart Nginx
+  action: service name=nginx state=restarted
+
+- name: Remove the log directory
+  file: path={{ app_location }}/current/log
+        state=absent
+
+- name: Symlink the log directory to the shared location
+  file: path={{ app_location }}/current/log
+        src={{ app_location }}/shared/log
+        state=link
+        force=yes
+  sudo: yes
+  sudo_user: deploy
+
+- name: Migrate the database
+  shell: "{{ruby_bin}}/rake db:migrate
+         chdir={{ app_location }}/current"
+  environment:
+    RAILS_ENV: production
+
+- name: Precompile assets
+  shell: "{{ruby_bin}}/rake assets:precompile
+         chdir={{ app_location }}/current"
+  environment:
+    RAILS_ENV: production
+
+#TODO do this natively, I think
+- name: Restart the app
+  command: "{{ item }}"
+  sudo: yes
+  sudo_user: deploy
+  with_items:
+    - touch {{ app_location }}/current/tmp/restart.txt

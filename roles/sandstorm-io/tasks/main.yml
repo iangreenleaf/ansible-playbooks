@@ -1,0 +1,36 @@
+---
+- name: install prereqs and headers
+  apt: pkg={{item}} state=present
+  with_items:
+    - build-essential
+    - libcap-dev
+    - libseccomp-dev
+    - pkg-config
+    - xz-utils
+    - clang-3.4
+    - clang-3.4
+    - clang-3.4
+
+- name: install libsodium from source (download)
+  get_url: url=http://download.libsodium.org/libsodium/releases/libsodium-0.5.0.tar.gz dest=/tmp/libsodium-0.5.0.tar.gz
+
+- name: install libsodium from source (unzip)
+  command: tar -xzf /tmp/libsodium-0.5.0.tar.gz
+  args:
+    chdir: /tmp/
+
+- name: install libsodium from source (configure)
+  command: ./configure
+  args:
+    chdir: /tmp/libsodium-0.5.0
+
+- name: install libsodium from source (make)
+  command: make && make check
+  args:
+    chdir: /tmp/libsodium-0.5.0
+
+- name: install libsodium from source (install)
+  command: make install
+  args:
+    chdir: /tmp/libsodium-0.5.0
+  sudo: yes

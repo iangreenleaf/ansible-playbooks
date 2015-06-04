@@ -1,0 +1,10 @@
+---
+- hosts: digitalocean
+  user: root
+  vars_files:
+    - secrets.yml
+  roles:
+    - common
+    - firewall
+    #- nginx-passenger
+    - sandstorm-io
