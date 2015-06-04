@@ -12,6 +12,7 @@ This is all the explanation you're gonna get for the moment.
 
 ### Dev ###
 
+    vagrant up
     ansible-playbook tracks.yml -i ./ansible_hosts
 
 ### Prod ###
