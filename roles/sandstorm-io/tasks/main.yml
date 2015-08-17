@@ -6,31 +6,27 @@
     - libcap-dev
     - libseccomp-dev
     - pkg-config
+    - clang-3.4
     - xz-utils
-    - clang-3.4
-    - clang-3.4
-    - clang-3.4
+    - zip
+    - unzip
+    - imagemagick
+    - curl
+    - discount
+    - git
 
-- name: install libsodium from source (download)
-  get_url: url=http://download.libsodium.org/libsodium/releases/libsodium-0.5.0.tar.gz dest=/tmp/libsodium-0.5.0.tar.gz
+- name: check out the source code
+  git: repo=https://github.com/sandstorm-io/sandstorm.git
+       dest={{ build_location }}/sandstorm-{{ sandstorm_version }}
+       version={{ sandstorm_version }}
 
-- name: install libsodium from source (unzip)
-  command: tar -xzf /tmp/libsodium-0.5.0.tar.gz
+- name: build source
+  command: make
   args:
-    chdir: /tmp/
+    chdir: "{{ build_location }}/sandstorm-{{ sandstorm_version }}"
+    creates: "{{ build_location }}/sandstorm-{{ sandstorm_version }}/sandstorm-0.tar.xz"
 
-- name: install libsodium from source (configure)
-  command: ./configure
-  args:
-    chdir: /tmp/libsodium-0.5.0
-
-- name: install libsodium from source (make)
-  command: make && make check
-  args:
-    chdir: /tmp/libsodium-0.5.0
-
-- name: install libsodium from source (install)
+- name: install from source
   command: make install
   args:
-    chdir: /tmp/libsodium-0.5.0
-  sudo: yes
+    chdir: "{{ build_location }}/sandstorm-{{ sandstorm_version }}"

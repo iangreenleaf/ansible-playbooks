@@ -1,8 +1,5 @@
 ---
-app_location: "/var/www/squash"
-ruby_version: 1.9.3-p385
-domain: squash.iangreenleaf.com
-dbname: squash
-dbuser: squash
-# In secrets.yml
-#dbpassword: abcd
+sandstorm_version: v0.85
+sandstorm_server_user: sandstorm
+build_location: /var/build
+install_location: /usr/sandstorm
