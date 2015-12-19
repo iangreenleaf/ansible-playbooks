@@ -1,0 +1,21 @@
+---
+dependencies:
+  - role: rpi-users
+    users: "{{ rpi.samba.users }}"
+  - role: galaxy/bertvv.samba
+    samba_users: "{{ rpi.samba.users }}"
+    samba_shares:
+      - name: Ian
+        valid_users: youngian
+        write_list: youngian
+        public: no
+      - name: Shared
+        valid_users: youngian,ingramka
+        write_list: youngian,ingramka
+        public: no
+    samba_workgroup: ARKOS
+    samba_server_string: Youngram file share
+    samba_shares_root: /mnt/flash
+    samba_load_homes: false
+    samba_load_printers: false
+    become: yes

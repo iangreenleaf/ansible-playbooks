@@ -1,0 +1,5 @@
+---
+- name: Add system users
+  user: name={{ item.name}} groups=users append=yes
+  with_items: "{{ users }}"
+  become: yes

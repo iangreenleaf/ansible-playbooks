@@ -1,0 +1,3 @@
+---
+- name: Mount the external drive
+  mount: name=/mnt/flash src='UUID=a6607ccc-831d-4dd2-aae4-8c07e60f1dbe' fstype=ext4 state=mounted
