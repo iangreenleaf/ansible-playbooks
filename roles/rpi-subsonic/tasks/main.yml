@@ -1,0 +1,4 @@
+---
+- name: Install Java
+  apt: pkg=openjdk-7-jre
+  become: yes

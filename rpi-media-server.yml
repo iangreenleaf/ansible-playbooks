@@ -4,7 +4,8 @@
   vars_files:
     - secrets.yml
   roles:
-    - role: rpi-common
-      become: yes
+    #- role: rpi-common
+    #  become: yes
+    - role: rpi-subsonic
     - role: rpi-samba
       become: yes
