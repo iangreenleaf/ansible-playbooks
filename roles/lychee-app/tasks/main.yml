@@ -42,7 +42,7 @@
 - name: Check out the latest revision of the codebase
   git: repo=https://github.com/electerious/Lychee.git
        dest={{ app_location }}/current
-       version=v2.7.0
+       version={{ lychee_version }}
   sudo: yes
   sudo_user: deploy
   notify:

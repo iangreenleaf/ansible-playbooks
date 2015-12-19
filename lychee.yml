@@ -39,4 +39,5 @@
           pass: "4CMepo*NSaN9&m0e"
           priv: "lychee.*:ALL"
           host: "localhost"
-    - lychee-app
+    - role: lychee-app
+      lychee_version: v3.0.6
