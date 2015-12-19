@@ -1,0 +1,11 @@
+# File: roles/samba/handlers/main.yml
+---
+- name: Restart Samba
+  service:
+    name: smbd
+    state: restarted
+
+- name: Restart WinBind
+  service:
+    name: nmbd
+    state: restarted

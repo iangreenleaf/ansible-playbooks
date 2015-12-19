@@ -1,0 +1,94 @@
+# File: roles/samba/tasks/main.yml
+---
+
+- name: Install Samba packages
+  yum:
+    pkg: "{{ item }}"
+    state: installed
+  with_items:
+    - samba-common
+    - samba
+    - samba-client
+  tags: samba
+  when: "'{{ansible_pkg_mgr}}' == 'yum'"
+
+- name: Install Samba packages
+  apt:
+    pkg: "{{ item }}"
+    state: installed
+  with_items:
+    - samba-common
+    - samba
+    - samba-client
+  tags: samba
+  when: "'{{ansible_pkg_mgr}}' == 'apt'"
+
+- name: Create Samba shares root directory
+  file:
+    state: directory
+    path: "{{ samba_shares_root }}"
+    owner: root
+    group: root
+    mode: '0755'
+  when: samba_shares is defined
+  tags: samba
+
+- name: Create share directories
+  with_items: samba_shares
+  file:
+    state: directory
+    path: "{{ samba_shares_root}}/{{ item.name }}"
+    owner: root
+    group: "{{ item.group|default('users') }}"
+    mode: "{{ item.directory_mode|default('0775') }}"
+    setype: "{{ item.setype|default('samba_share_t') }}"
+  when: samba_shares is defined
+  tags: samba
+
+- name: Check if /var/www/html exists
+  when: samba_create_varwww_symlinks
+  stat: path=/var/www/html
+  register: var_www_html
+  tags: samba
+
+- name: Create link to shares in /var/www/html
+  when: var_www_html.stat.isdir is defined and var_www_html.stat.isdir == true
+  file:
+    state: link
+    path: "/var/www/html/{{ item.name }}"
+    src: "{{ samba_shares_root }}/{{ item.name }}"
+  with_items: samba_shares
+  tags: samba
+
+- name: Samba configuration
+  template:
+    dest: /etc/samba/smb.conf
+    src: smb.conf.j2
+    validate: 'testparm -s %s'
+  notify:
+    - Restart Samba
+    - Restart WinBind
+  tags: samba
+
+- name: Start Samba service
+  service:
+    name: smbd
+    state: started
+    enabled: yes
+  tags: samba
+
+- name: Start WindBind service
+  service:
+    name: nmbd
+    state: started
+    enabled: yes
+  tags: samba
+
+- name: Create Samba users if they don't exist yet
+  shell: >
+    (pdbedit -L | grep {{ item.name }} 2>&1 > /dev/null) \
+    || (echo {{ item.password }}; echo {{ item.password }}) \
+    | smbpasswd -s -a {{ item.name }}
+  with_items: samba_users
+  when: samba_users is defined
+  tags: samba
