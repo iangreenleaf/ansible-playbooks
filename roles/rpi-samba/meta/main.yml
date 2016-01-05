@@ -9,10 +9,17 @@ dependencies:
         valid_users: youngian
         write_list: youngian
         public: no
+        path: /mnt/external/Ian
+      - name: Kather
+        valid_users: ingramka
+        write_list: ingramka
+        public: no
+        path: /mnt/external/Katherine
       - name: Shared
         valid_users: youngian,ingramka
         write_list: youngian,ingramka
         public: no
+        path: /mnt/flash/Shared
     samba_workgroup: ARKOS
     samba_server_string: Youngram file share
     samba_shares_root: /mnt/flash
