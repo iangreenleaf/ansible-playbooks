@@ -8,3 +8,4 @@
       become: yes
     - role: rpi-samba
       become: yes
+    - role: rpi-subsonic

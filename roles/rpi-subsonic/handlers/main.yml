@@ -1,0 +1,4 @@
+---
+- name: Restart subsonic
+  action: service name=subsonic state=restarted
+  become: yes

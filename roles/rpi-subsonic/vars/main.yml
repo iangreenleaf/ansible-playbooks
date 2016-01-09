@@ -1,0 +1,5 @@
+---
+subsonic_user: subsonic
+subsonic_port: 9340
+subsonic_https_port: 0
+subsonic_max_memory_mb: 100
