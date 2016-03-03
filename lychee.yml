@@ -16,11 +16,11 @@
         - php5-mysql
       php_fpm_pools:
         - name: lychee
-          user: deploy
-          group: deploy
+          user: www-data
+          group: www-data
           listen: /var/run/php-fpm/lychee.sock
-          listen.owner: deploy
-          listen.group: deploy
+          listen.owner: www-data
+          listen.group: www-data
           listen.mode: "0660"
           pm: dynamic
           pm.max_children: 5

@@ -40,8 +40,8 @@
 
 - name: Create the application directories
   file: path={{ item }}
-        owner=deploy
-        group=deploy
+        owner=www-data
+        group=www-data
         state=directory
   with_items:
     - "{{ app_location }}"
@@ -56,7 +56,7 @@
        dest={{ app_location }}/current
        version=master
   sudo: yes
-  sudo_user: deploy
+  sudo_user: www-data
   notify:
     - Remove the log directory
     - Symlink the log directory to the shared location
@@ -68,32 +68,32 @@
 - name: Set local ruby version
   template: src=roles/rbenv/templates/.ruby-version.j2
             dest={{ app_location }}/current/.ruby-version
-            owner=deploy
-            group=deploy
+            owner=www-data
+            group=www-data
 
 - name: Secret token
   template: src=secret_token.rb.j2
             dest={{ app_location }}/current/config/initializers/secret_token.rb
-            owner=deploy
-            group=deploy
+            owner=www-data
+            group=www-data
 
 - name: Auth settings
   template: src=authentication.yml.j2
             dest={{ app_location }}/current/config/environments/common/authentication.yml
-            owner=deploy
-            group=deploy
+            owner=www-data
+            group=www-data
 
 - name: Common mailer settings
   template: src=mailer_common.yml.j2
             dest={{ app_location }}/current/config/environments/common/mailer.yml
-            owner=deploy
-            group=deploy
+            owner=www-data
+            group=www-data
 
 - name: Mailer settings
   template: src=mailer.yml.j2
             dest={{ app_location }}/current/config/environments/production/mailer.yml
-            owner=deploy
-            group=deploy
+            owner=www-data
+            group=www-data
 
 - name: Disable SSL redirect
   lineinfile: dest={{ app_location }}/current/config/environments/production.rb
@@ -129,12 +129,12 @@
          chdir={{ app_location }}/current"
   environment: "{{ruby_env}}"
   sudo: yes
-  sudo_user: deploy
+  sudo_user: www-data
   notify:
     - rbenv rehash
     - Restart the app
 
 - name: set up the database config
   sudo: yes
-  sudo_user: deploy
+  sudo_user: www-data
   template: src=database.yml.j2 dest={{ app_location }}/current/config/database.yml

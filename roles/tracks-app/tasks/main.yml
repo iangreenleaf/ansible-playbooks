@@ -28,8 +28,8 @@
 
 - name: Create the application directories
   file: path={{ item }}
-        owner=deploy
-        group=deploy
+        owner=www-data
+        group=www-data
         state=directory
   with_items:
     - "{{ app_location }}"
@@ -50,7 +50,7 @@
        dest={{ app_location }}/current
        version=d99f7f3f8fd5233846435624ae78e74b80e0d90b
   sudo: yes
-  sudo_user: deploy
+  sudo_user: www-data
   notify:
     - Remove the log directory
     - Symlink the log directory to the shared location
@@ -62,15 +62,15 @@
 - name: Set local ruby version
   template: src=roles/rbenv/templates/.ruby-version.j2
             dest={{ app_location }}/current/.ruby-version
-            owner=deploy
-            group=deploy
+            owner=www-data
+            group=www-data
 
 - name: Install the bundle
   shell: "{{ruby_bin}}/bundle install --deployment --path {{ app_location }}/shared/bundle
          chdir={{ app_location }}/current"
   environment: "{{ruby_env}}"
   sudo: yes
-  sudo_user: deploy
+  sudo_user: www-data
   notify:
     - rbenv rehash
     - restart tracks
@@ -78,10 +78,10 @@
 - name: set up the application config
   template: src=site.yml.j2 dest={{ app_location }}/current/config/site.yml
   sudo: yes
-  sudo_user: deploy
+  sudo_user: www-data
   notify: restart tracks
 
 - name: set up the database config
   sudo: yes
-  sudo_user: deploy
+  sudo_user: www-data
   template: src=database.yml.j2 dest={{ app_location }}/current/config/database.yml

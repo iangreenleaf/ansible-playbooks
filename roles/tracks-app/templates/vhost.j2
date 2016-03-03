@@ -8,7 +8,7 @@ server {
   error_log  {{ app_location }}/shared/log/nginx-error.log;
 
   passenger_enabled on;
-  passenger_user    deploy;
-  passenger_group   deploy;
+  passenger_user    www-data;
+  passenger_group   www-data;
   rack_env          production;
 }

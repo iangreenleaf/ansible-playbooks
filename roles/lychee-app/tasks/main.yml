@@ -4,8 +4,8 @@
 
 - name: Create the socket directory
   file: path=/var/run/php-fpm
-        owner=deploy
-        group=deploy
+        owner=www-data
+        group=www-data
         state=directory
 
 - name: Generate the virtual host
@@ -26,8 +26,8 @@
 
 - name: Create the application directories
   file: path={{ item }}
-        owner=deploy
-        group=deploy
+        owner=www-data
+        group=www-data
         state=directory
   with_items:
     - "{{ app_location }}"
@@ -44,7 +44,7 @@
        dest={{ app_location }}/current
        version={{ lychee_version }}
   sudo: yes
-  sudo_user: deploy
+  sudo_user: www-data
   notify:
     - Symlink the shared directories
     - Modify permissions on uploads

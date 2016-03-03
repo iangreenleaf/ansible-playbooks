@@ -14,8 +14,8 @@
 
 - name: Create the application directory
   file: path={{ item }}
-        owner=deploy
-        group=deploy
+        owner=www-data
+        group=www-data
         state=directory
   with_items:
     - "{{ app_location }}"
@@ -26,13 +26,13 @@
        version=master
        update=yes
   sudo: yes
-  sudo_user: deploy
+  sudo_user: www-data
 
 - name: create sqlite db
   command: cp {{app_location}}/db.sqlite.sample {{app_location}}/{{item}}.sqlite
            creates={{app_location}}/{{item}}.sqlite
   sudo: yes
-  sudo_user: deploy
+  sudo_user: www-data
   with_items:
     - kdwb
     - k102
@@ -58,14 +58,14 @@
        virtualenv={{app_location}}/venv
        chdir={{app_location}}
   sudo: yes
-  sudo_user: deploy
+  sudo_user: www-data
 
 - name: Set up cron jobs
   cron: name="Scrape {{item}} radio playlists"
         job="{{app_location}}/venv/bin/python {{app_location}}/scrape_{{item}}.py"
         minute=*/15
         cron_file=radio_scraper
-        user=deploy
+        user=www-data
   with_items:
     - yescom
     - clearchannel

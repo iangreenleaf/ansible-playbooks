@@ -8,7 +8,7 @@
         state=link
         force=yes
   sudo: yes
-  sudo_user: deploy
+  sudo_user: www-data
   with_items:
     - log
     - uploads
@@ -25,4 +25,4 @@
     - uploads/import
     - data
   sudo: yes
-  sudo_user: deploy
+  sudo_user: www-data

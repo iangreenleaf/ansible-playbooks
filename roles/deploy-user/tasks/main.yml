@@ -1,17 +1,16 @@
 ---
 - name: Add the deploy user
-  user: name=deploy
-        home=/home/deploy
+  user: name=www-data
         shell=/bin/bash
         comment="Deploy User"
 
 - name: Enable sudo access for the deploy user
-  user: name=deploy
+  user: name=www-data
         groups=sudo
         append=yes
 
 - name: Set up authorized_keys for the deploy user
-  authorized_key: user=deploy
+  authorized_key: user=www-data
                   state=present
                   key="{{ item }}"
   with_items:
