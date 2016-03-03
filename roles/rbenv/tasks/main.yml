@@ -1,25 +1,3 @@
-- name: install rbenv build deps
-  apt: pkg={{item}} state=latest install_recommends=no
-  with_items:
-    - build-essential
-    - git
-    - libcurl4-openssl-dev
-    - libmysqlclient-dev
-    - libreadline6-dev
-    - libssl-dev
-    - libxml2-dev
-    - libxslt1-dev
-    - zlib1g-dev
-
-- name: check out rbenv from git
-  git: repo=git://github.com/sstephenson/rbenv.git dest={{rbenv_root}} version=v0.4.0
-
-- name: install ruby-build
-  git: repo=git://github.com/sstephenson/ruby-build.git dest={{rbenv_root}}/plugins/ruby-build
-
-- name: add rbenv initialization to profile
-  template: src=rbenv.sh.j2 dest=/etc/profile.d/rbenv.sh owner=root group=root mode=0755
-
 - name: source rbenv init in non-interactive shells
   lineinfile: dest=/etc/bash.bashrc
               state=present
@@ -33,16 +11,9 @@
 # Source config file right away
 - meta: flush_handlers
 
-- name: install ruby {{ruby_version}}
-  shell: rbenv install {{ruby_version}}
-         creates={{rbenv_root}}/versions/{{ruby_version}}
-  environment: "{{ruby_env}}"
-
-- name: set global ruby {{ruby_version}}
-  when: make_global_ruby
-  shell: rbenv global {{ruby_version}}
-
 - name: install bundler
-  gem: name=bundler state=latest
+  # Sigh, tough to get the env right on this
+  #gem: name=bundler state=latest
+  shell: gem install bundler
   notify: rbenv rehash
   environment: "{{ruby_env}}"

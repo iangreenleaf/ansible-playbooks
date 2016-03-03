@@ -7,3 +7,5 @@
 - name: bertvv.samba
   src: https://github.com/iangreenleaf/ansible-role-samba
   version: master
+- src: zzet.rbenv
+  version: 2.1.9

@@ -1,9 +1,6 @@
-# Make this the global ruby on this machine
-make_global_ruby: false
-# TODO add a ruby_root?
 rbenv_root: /usr/local/rbenv
 ruby_bin: "{{rbenv_root}}/shims"
-ruby_lib: "{{rbenv_root}}/versions/{{ruby_version}}/lib"
+ruby_gems_lib: "{{rbenv_root}}/versions/{{ruby_version}}/lib/ruby/gems/2.2.0/gems"
 ruby_env:
   RBENV_VERSION: "{{ruby_version}}"
   RBENV_ROOT: "{{rbenv_root}}"

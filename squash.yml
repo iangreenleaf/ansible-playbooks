@@ -7,6 +7,12 @@
     - common
     - firewall
     - deploy-user
+    - role: galaxy/zzet.rbenv
+      rbenv:
+        env: system
+        version: v1.0.0
+        rbenv_root: "{{rbenv_root}}"
+        ruby_version: "{{ruby_version}}"
     - rbenv
     - nginx-passenger
     - squash-app

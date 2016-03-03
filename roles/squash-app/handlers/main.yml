@@ -15,7 +15,7 @@
   sudo_user: www-data
 
 - name: Migrate the database
-  shell: "{{ruby_bin}}/rake db:migrate
+  shell: "{{ruby_bin}}/bundle exec rake db:migrate
          chdir={{ app_location }}/current"
   environment:
     RAILS_ENV: production
@@ -23,7 +23,7 @@
   sudo_user: www-data
 
 - name: Precompile assets
-  shell: "{{ruby_bin}}/rake assets:precompile
+  shell: "{{ruby_bin}}/bundle exec rake assets:precompile
          chdir={{ app_location }}/current"
   environment:
     RAILS_ENV: production
