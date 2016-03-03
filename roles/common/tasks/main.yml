@@ -3,6 +3,9 @@
   apt: upgrade=safe
        update_cache=yes
 
+- name: Help apt do HTTPS
+  apt: pkg=apt-transport-https
+
 - name: Install git
   apt: pkg=git
 

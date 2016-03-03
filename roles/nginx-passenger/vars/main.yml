@@ -1,6 +1,4 @@
 ---
-#TODO wtf lock this or something
-passenger_version: "4.0.10"
 #TODO originally these were server-dependent
 passenger_max_pool_size: "4"
 passenger_max_requests:  "2000"

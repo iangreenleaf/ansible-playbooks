@@ -1,30 +1,8 @@
-user  deploy;
-worker_processes  4;  
+passenger_root /usr/lib/ruby/vendor_ruby/phusion_passenger/locations.ini;
+passenger_ruby {{ rbenv_root }}/shims/ruby;
+passenger_max_pool_size {{ passenger_max_pool_size }};
+passenger_max_requests {{ passenger_max_requests }};
 
-events {
-    worker_connections  1024;
-}
+client_max_body_size  10M;
 
-
-http {
-    passenger_root {{ ruby_lib }}/ruby/gems/1.9.1/gems/passenger-{{ passenger_version }};
-    passenger_ruby {{ rbenv_root }}/shims/ruby;
-    passenger_max_pool_size {{ passenger_max_pool_size }};
-    passenger_max_requests {{ passenger_max_requests }};
-
-    include       mime.types;
-    default_type  application/octet-stream;
-
-    sendfile       on;
-    tcp_nopush     on;
-    client_max_body_size  10M;
-
-    keepalive_timeout  10;
-
-    gzip  on;
-    gzip_types  text/css text/xml text/plain application/x-javascript application/atom+xml application/rss+xml;
-
-    server_names_hash_bucket_size  64;
-
-    include /etc/nginx/sites-enabled/*;
-}
+server_names_hash_bucket_size  64;
