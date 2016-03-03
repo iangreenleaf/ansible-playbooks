@@ -1,6 +1,6 @@
 ---
 app_location: "/var/www/squash"
-ruby_version: 1.9.3-p385
+ruby_version: 2.2.4
 domain: squash.iangreenleaf.com
 dbname: squash
 dbuser: squash

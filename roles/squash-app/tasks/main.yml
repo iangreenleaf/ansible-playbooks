@@ -1,6 +1,6 @@
 ---
 - name: install java (for Closure)
-  apt: pkg=openjdk-6-jre state=present
+  apt: pkg=openjdk-7-jre state=present
 
 - name: install sendmail
   apt: pkg=sendmail state=present
@@ -55,6 +55,7 @@
   git: repo=https://github.com/SquareSquash/web.git
        dest={{ app_location }}/current
        version=master
+       force=yes
   sudo: yes
   sudo_user: www-data
   notify:
@@ -94,18 +95,6 @@
             dest={{ app_location }}/current/config/environments/production/mailer.yml
             owner=www-data
             group=www-data
-
-- name: Disable SSL redirect
-  lineinfile: dest={{ app_location }}/current/config/environments/production.rb
-           state=present
-           regexp="\bconfig\.force_ssl\s*=\s*true\b"
-           line="config.force_ssl = false"
-
-- name: Replace SSL ping
-  lineinfile: dest={{ app_location }}/current/config/environments/production.rb
-           state=present
-           regexp="config.middleware.insert_before ::ActionDispatch::SSL, Ping"
-           line="config.middleware.insert_before ::Rack::Runtime, Ping"
 
 - name: Enable CORS
   lineinfile: >
