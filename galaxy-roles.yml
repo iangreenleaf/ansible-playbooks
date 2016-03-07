@@ -9,3 +9,5 @@
   version: master
 - src: zzet.rbenv
   version: 2.1.9
+- src: nbz4live.php-fpm
+  version: 0.2.9

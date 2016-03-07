@@ -8,7 +8,7 @@
     - common
     - firewall
     - deploy-user
-    - role: nbz4live.php-fpm
+    - role: galaxy/nbz4live.php-fpm
       php_fpm_apt_packages:
         - php5-fpm
         - php5-gd
