@@ -8,7 +8,6 @@
     - role: firewall
       extra_ports:
         - 6667
-    - deploy-user
     - role: willshersystems.znc
       znc_user_name: iangreenleaf
       znc_user_password: "{{znc_password}}"
