@@ -40,4 +40,4 @@
           priv: "lychee.*:ALL"
           host: "localhost"
     - role: lychee-app
-      lychee_version: v3.0.6
+      lychee_version: v3.0.9
