@@ -1,4 +1,4 @@
-## Ansibles - MySQL [![Build Status](https://travis-ci.org/Ansibles/mysql.png)](https://travis-ci.org/Ansibles/mysql)
+## ANXS - MySQL [![Build Status](https://travis-ci.org/ANXS/mysql.png?branch=master)](https://travis-ci.org/ANXS/mysql)
 
 Ansible role that installs MySQL on (for now) Ubuntu variants.
 Features include:
@@ -12,7 +12,7 @@ Features include:
 
 #### Requirements & Dependencies
 - Tested on Ansible 1.4 or higher.
-- Ansibles.monit if you want monit protection (in that case, you should set `monit_protection: true`)
+- ANXS.monit if you want monit protection (in that case, you should set `monit_protection: true`)
 
 
 #### Variables
@@ -20,8 +20,10 @@ Features include:
 ```yaml
 # Basic settings
 mysql_port: 3306                        # The port on which mysql listens
-mysql_bind_address: "0.0.0.0"           # The address the mysql server binds on
-mysql_root_password: 'pass'             # The root password
+mysql_bind_address: '0.0.0.0'           # The address the mysql server binds on
+mysql_root_password: ''                 # The new root password
+mysql_default_root_password: ''         # The root password
+mysql_ppa: ''                           # Install MySQL from PPA repository
 
 # Fine Tuning
 mysql_key_buffer: '16M'
@@ -62,8 +64,38 @@ mysql_users:
     host: "%"                           # optional, defaults to "localhost"
 
 # GLOBAL Setting
-monit_protection: false                 # true or false, requires Ansibles.monit
+monit_protection: false                 # true or false, requires ANXS.monit
+
+# List of apt packages to install
+mysql_packages:
+  - mysql-server
+  - mysql-client
+  - python-mysqldb
 ```
+
+# Setting/Updating the root Password
+If You would like to change your mysql root password using this role, ensure
+you use the following variables in your play:
+
+```yaml
+mysql_default_root_password: <Your current root password>
+mysql_root_password: <Your new root password>
+```
+
+#### Testing
+This project comes with a VagrantFile, this is a fast and easy way to test
+changes to the role, fire it up with `vagrant up`, provision the box with
+either:
+
+    vagrant provision
+
+This also happens automatically after the first `vagrant up`, or:
+
+    ansible-playbook test.yml -i vagrant-inventory --sudo
+
+This is the ansible way, and will easily allow command line arguments like `--tags` and `-e`
+
+See [vagrant docs](https://docs.vagrantup.com/v2/) for getting setup with vagrant
 
 
 #### License
@@ -73,4 +105,4 @@ Licensed under the MIT License. See the LICENSE file for details.
 
 #### Feedback, bug-reports, requests, ...
 
-Are [welcome](https://github.com/ansibles/mysql/issues)!
+Are [welcome](https://github.com/ANXS/mysql/issues)!

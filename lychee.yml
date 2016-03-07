@@ -28,7 +28,7 @@
           pm.min_spare_servers: 1
           pm.max_spare_servers: 3
           chdir: /
-    - role: Ansibles.mysql
+    - role: galaxy/ANXS.mysql
       mysql_root_password: ''
       mysql_databases:
         - name: lychee

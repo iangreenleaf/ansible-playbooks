@@ -1,5 +1,5 @@
-- src: Ansibles.mysql
-  version: v1.0.2
+- src: ANXS.mysql
+  version: v1.2.0
 - src: jnv.unattended-upgrades
   version: v1.0.1
 - src: willshersystems.znc
