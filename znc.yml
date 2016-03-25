@@ -20,7 +20,7 @@
           name: znc
           keypath: /var/lib/letsencrypt/znc.key
           certpath: /var/lib/znc/znc.crt
-          chainedcertpath: /var/lib/znc/znc.pem
+          fullchainedcertpath: /var/lib/znc/znc.pem
           host: znc.iangreenleaf.com
     - role: galaxy/willshersystems.znc
       znc_user_name: iangreenleaf
