@@ -1,0 +1,24 @@
+---
+- name: Set up Nginx vhost directories
+  file: path=/etc/nginx/{{ item }}
+        state=directory
+  with_items:
+    - sites-available
+    - sites-enabled
+
+- name: Generate the virtual host
+  template: src=vhost.j2
+            dest=/etc/nginx/sites-available/letsencrypt-{{name}}
+            mode=755
+  notify:
+    - Restart Nginx
+
+- name: Enable the virtual host
+  file: path=/etc/nginx/sites-enabled/letsencrypt-{{name}}
+        src=/etc/nginx/sites-available/letsencrypt-{{name}}
+        state=link
+  notify:
+    - Restart Nginx
+
+# Restart nginx now before continuing
+- meta: flush_handlers

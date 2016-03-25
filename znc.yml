@@ -8,7 +8,21 @@
     - role: firewall
       extra_ports:
         - 6667
-    - role: willshersystems.znc
+    - nginx
+    - role: nginx-letsencrypt
+      name: znc
+      domain: znc.iangreenleaf.com
+      challenge_dir: /var/www/letsencrypt
+    - role: galaxy/andreaswolf.letsencrypt
+      acme_tiny_challenges_directory: /var/www/letsencrypt
+      letsencrypt_certs:
+        -
+          name: znc
+          keypath: /var/lib/letsencrypt/znc.key
+          certpath: /var/lib/znc/znc.crt
+          chainedcertpath: /var/lib/znc/znc.pem
+          host: znc.iangreenleaf.com
+    - role: galaxy/willshersystems.znc
       znc_user_name: iangreenleaf
       znc_user_password: "{{znc_password}}"
       znc_user_nick: iangreenleaf
@@ -16,4 +30,3 @@
       znc_user_buffer: 1000
       znc_port: 6667
       znc_ssl: true
-      znc_ssl_certificate_file: ~/keys/znc.iangreenleaf.com-startssl.pem

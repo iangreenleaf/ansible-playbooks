@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  author: Andreas Wolf
+  description: Installs and configures acme-tiny, a lightweight Let’s encrypt client.
+  issue_tracker_url: https://github.com/andreaswolf/ansible-role-letsencrypt/issues
+  license: MIT
+  min_ansible_version: 1.3
+
+  platforms:
+  - name: Debian
+    versions:
+    - all
+  - name: Ubuntu
+    versions:
+    - all
+
+  categories:
+  - networking
+  - system
+  - web
+dependencies: []

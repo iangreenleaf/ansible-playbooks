@@ -1,0 +1,58 @@
+---
+
+acme_tiny_repo: 'https://github.com/diafygi/acme-tiny.git'
+acme_tiny_commit: '69a457269a6392ac31b629b4e103e8ea7dd282c9'
+
+acme_tiny_software_directory: '/usr/local/letsencrypt'
+acme_tiny_data_directory: '/var/lib/letsencrypt'
+acme_tiny_challenges_directory: '/var/www/letsencrypt'
+
+# Path to the local file containing the account key to copy to the server.
+# Secure this file using Git-crypt for example.
+# Leave this blank to generate a new account key that will need to be registered manually with Letsencrypt.org
+#letsencrypt_account_key_source_file: /my/account.key
+
+# Content of the account key to copy to the server.
+# Secure this key using Ansible Vault for example.
+# Leave this blank to generate a new account key that will need to be registered manually with Letsencrypt.org
+#letsencrypt_account_key_source_content: |
+#  -----BEGIN RSA PRIVATE KEY-----
+#  MIIJKAJBBBKCaGEA63J7t9dqyua5+Q+P6M3iHtLEKpF/AZcZNBHr1F2Oo8+Hfyvl
+#  KWXliiWjUORxDxI1c56Rw2VCIExnFjWJAdSLv6/XaQWo2T7U28bkKbAlCF9=
+#  -----END RSA PRIVATE KEY-----
+
+letsencrypt_account_key: '{{ acme_tiny_data_directory }}/account.key'
+
+letsencrypt_intermediate_cert_path: '/etc/ssl/certs/lets-encrypt-x1-cross-signed.pem'
+letsencrypt_intermediate_cert_url: 'https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.pem'
+letsencrypt_intermediate_cert_sha256sum: '6c0a324bb803e9d66b8986ea2085bb9d6bdfe33f5c04a03a3f7024f4aa8e7a2d'
+
+letsencrypt_key_dir: '/etc/ssl/letsencrypt/keys'
+letsencrypt_certs_dir: '/etc/ssl/letsencrypt/certs'
+
+letsencrypt_key_dir_permissions: '0700'
+letsencrypt_key_dir_owner: root
+letsencrypt_key_dir_group: root
+
+letsencrypt_certs: []
+
+letsencrypt_certs_dir_permissions: '0755'
+letsencrypt_certs_dir_owner: '{{ letsencrypt_user }}'
+letsencrypt_certs_dir_group: '{{ letsencrypt_group }}'
+
+letsencrypt_user: 'letsencrypt'
+letsencrypt_group: 'letsencrypt'
+
+letsencrypt_default_key_owner: 'root'
+letsencrypt_default_key_group: 'root'
+letsencrypt_default_key_permissions: '0600'
+
+# the minimum age (in days) after which a certificate will be renewed
+letsencrypt_min_renewal_age: 60
+
+# the days of a month the cronjob should be run. Make sure to run it rather often, three times per month is a pretty
+# good value. It does not harm to run it often, as it will only regenerate certificates that have passed a certain age
+# (60 days by default).
+letsencrypt_cronjob_daysofmonth: 1,11,21
+
+...
