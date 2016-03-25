@@ -1,31 +1,14 @@
 ---
-- name: Recognize Phusion APT key
-  apt_key: keyserver=keyserver.ubuntu.com
-           id=561F9B9CAC40B2F7
-
-- name: Use Phusion APT repo
-  apt_repository: repo='deb https://oss-binaries.phusionpassenger.com/apt/passenger precise main'
-
-- name: Install Passenger + Nginx
-  apt: pkg={{item}}
+- name: Install Passenger
+  apt: pkg=passenger
        state=present
-  with_items:
-    - passenger
-    - nginx-extras
 
 - name: Generate the Nginx configuration file
   template: src=nginx-conf.j2
             dest=/etc/nginx/conf.d/passenger.conf
   notify: Restart Nginx
 
-- name: Set up Nginx vhost directories
-  file: path=/etc/nginx/{{ item }}
-        state=directory
-  with_items:
-    - sites-available
-    - sites-enabled
-
-- name: Set up log rotation for Nginx and Passenger
+- name: Set up log rotation for Passenger
   copy: src={{ item }}-logrotate
         dest=/etc/logrotate.d/{{ item }}
   with_items:

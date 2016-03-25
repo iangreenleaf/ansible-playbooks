@@ -8,5 +8,6 @@
     - firewall
     - deploy-user
     - rbenv
+    - nginx
     - nginx-passenger
     - tracks-app

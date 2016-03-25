@@ -14,5 +14,6 @@
         rbenv_root: "{{rbenv_root}}"
         ruby_version: "{{ruby_version}}"
     - rbenv
+    - nginx
     - nginx-passenger
     - squash-app
