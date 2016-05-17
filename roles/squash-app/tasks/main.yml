@@ -96,6 +96,12 @@
             owner=www-data
             group=www-data
 
+- name: Dogfooding
+  template: src=dogfood.yml.j2
+            dest={{ app_location }}/current/config/environments/production/dogfood.yml
+            owner=www-data
+            group=www-data
+
 - name: Enable CORS
   lineinfile: >
     dest={{ app_location }}/current/config/application.rb
