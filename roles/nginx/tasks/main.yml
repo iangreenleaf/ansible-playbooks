@@ -9,6 +9,7 @@
 - name: Install Passenger + Nginx
   apt: pkg=nginx-extras
        state=present
+       update_cache=yes
   notify: Restart Nginx
 
 - name: Set up Nginx vhost directories
