@@ -13,7 +13,7 @@ This is all the explanation you're gonna get for the moment.
 ### Dev ###
 
     vagrant up
-    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory --sudo playbook.yml
+    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory --become playbook.yml
 
 ### Prod ###
 
