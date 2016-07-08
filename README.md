@@ -13,8 +13,8 @@ This is all the explanation you're gonna get for the moment.
 ### Dev ###
 
     vagrant up
-    ansible-playbook tracks.yml -i ./ansible_hosts
+    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory --sudo playbook.yml
 
 ### Prod ###
 
-    ansible-playbook tracks.yml
+    ansible-playbook playbook.yml

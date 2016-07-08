@@ -20,7 +20,16 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--memory", "1024"]
   end
 
+  config.vm.define "ansible-test-machine-1"
+
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "base.yml"
+    ansible.sudo = true
+    ansible.groups = {
+      "digitalocean" => ["ansible-test-machine-1"],
+      "rpi2" => ["ansible-test-machine-1"],
+    }
+    # Print out the full command to run ansible
+    # ansible.verbose = "v"
   end
 end
