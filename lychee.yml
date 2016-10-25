@@ -42,4 +42,4 @@
           priv: "lychee.*:ALL"
           host: "localhost"
     - role: lychee-app
-      lychee_version: v3.0.9
+      lychee_version: v3.1.5
