@@ -23,6 +23,9 @@
           fullchainedcertpath: /var/lib/znc/znc.pem
           key_group: letsencrypt
           key_permissions: '0640'
+          letsencrypt_intermediate_cert_url: https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem
+          letsencrypt_intermediate_cert_path: '/etc/ssl/certs/lets-encrypt-x3-cross-signed.pem'
+          letsencrypt_intermediate_cert_sha256sum: 'e446c5e9dbef9d09ac9f7027c034602492437a05ff6c40011d7235fca639c79a'
           host: znc.iangreenleaf.com
     - role: galaxy/willshersystems.znc
       znc_user_name: iangreenleaf
