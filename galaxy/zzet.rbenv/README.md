@@ -21,7 +21,7 @@ Default variables are:
     rbenv:
       env: system
       version: v1.0.0
-      ruby_version: 2.3.0
+      ruby_version: 2.3.1
 
     rbenv_repo: "https://github.com/rbenv/rbenv.git"
 
@@ -32,7 +32,7 @@ Default variables are:
 
       - { name: "ruby-build",
           repo: "https://github.com/rbenv/ruby-build.git",
-          version: "v20151230" }
+          version: "v20160426" }
 
       - { name: "rbenv-default-gems",
           repo: "https://github.com/rbenv/rbenv-default-gems.git",
@@ -58,6 +58,11 @@ Default variables are:
 
     rbenv_users: []
 
+Variables to control a system installation (these are not set by default):
+
+    rbenv_owner: 'deploy'
+    rbenv_group: 'deploy'
+
 Description:
 
 - ` rbenv.env ` - Type of rbenv installation. Allows 'system' or 'user' values
@@ -68,6 +73,8 @@ Description:
 - ` rbenv_root ` - Install path
 - ` rbenv_users ` - Array of usernames for multiuser install. User must be present in the system
 - ` default_gems_file ` - This is Rbenv's plugin _rbenv-default-gems_. Sets the path to a default-gems file of your choice (_don't set it_ if you want to use the default file `files/default-gems`)
+- ` rbenv_owner ` - The user  owning `rbenv_root` when `rbenv.env` is `system`
+- ` rbenv_group ` - The group owning `rbenv_root` when `rbenv.env` is `system`
 
 Example:
 
