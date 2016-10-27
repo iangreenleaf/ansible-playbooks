@@ -14,18 +14,18 @@
 
 - name: ensure database is created
   postgresql_db: name={{dbname}}
-  sudo: yes
-  sudo_user: postgres
+  become: yes
+  become_user: postgres
 
 - name: ensure user has access to database
   postgresql_user: db={{dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL
-  sudo: yes
-  sudo_user: postgres
+  become: yes
+  become_user: postgres
 
 - name: ensure user does not have unnecessary privilege
   postgresql_user: name={{dbuser}} role_attr_flags=NOSUPERUSER,NOCREATEDB
-  sudo: yes
-  sudo_user: postgres
+  become: yes
+  become_user: postgres
 
 - name: Generate the virtual host and restart Nginx if it is updated
   template: src=vhost.j2
@@ -56,8 +56,8 @@
        dest={{ app_location }}/current
        version=master
        force=yes
-  sudo: yes
-  sudo_user: www-data
+  become: yes
+  become_user: www-data
   notify:
     - Remove the log directory
     - Symlink the log directory to the shared location
@@ -123,13 +123,13 @@
   shell: "{{ruby_bin}}/bundle install --deployment --path {{ app_location }}/shared/bundle
          chdir={{ app_location }}/current"
   environment: "{{ruby_env}}"
-  sudo: yes
-  sudo_user: www-data
+  become: yes
+  become_user: www-data
   notify:
     - rbenv rehash
     - Restart the app
 
 - name: set up the database config
-  sudo: yes
-  sudo_user: www-data
+  become: yes
+  become_user: www-data
   template: src=database.yml.j2 dest={{ app_location }}/current/config/database.yml

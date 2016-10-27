@@ -11,29 +11,29 @@
         src={{ app_location }}/shared/log
         state=link
         force=yes
-  sudo: yes
-  sudo_user: www-data
+  become: yes
+  become_user: www-data
 
 - name: Migrate the database
   shell: "{{ruby_bin}}/bundle exec rake db:migrate
          chdir={{ app_location }}/current"
   environment:
     RAILS_ENV: production
-  sudo: yes
-  sudo_user: www-data
+  become: yes
+  become_user: www-data
 
 - name: Precompile assets
   shell: "{{ruby_bin}}/bundle exec rake assets:precompile
          chdir={{ app_location }}/current"
   environment:
     RAILS_ENV: production
-  sudo: yes
-  sudo_user: www-data
+  become: yes
+  become_user: www-data
 
 #TODO do this natively, I think
 - name: Restart the app
   command: "{{ item }}"
-  sudo: yes
-  sudo_user: www-data
+  become: yes
+  become_user: www-data
   with_items:
     - touch {{ app_location }}/current/tmp/restart.txt

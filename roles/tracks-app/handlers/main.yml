@@ -11,16 +11,16 @@
         src={{ app_location }}/shared/log
         state=link
         force=yes
-  sudo: yes
-  sudo_user: www-data
+  become: yes
+  become_user: www-data
 
 - name: Symlink the tmp directory to the shared location
   file: path={{ app_location }}/current/tmp
         src={{ app_location }}/shared/tmp
         state=link
         force=yes
-  sudo: yes
-  sudo_user: www-data
+  become: yes
+  become_user: www-data
 
 - name: Initialize the database
   shell: "{{ruby_bin}}/rake db:setup
@@ -46,7 +46,7 @@
 #TODO do this natively, I think
 - name: restart tracks
   command: "{{ item }}"
-  sudo: yes
-  sudo_user: www-data
+  become: yes
+  become_user: www-data
   with_items:
     - touch {{ app_location }}/current/tmp/restart.txt

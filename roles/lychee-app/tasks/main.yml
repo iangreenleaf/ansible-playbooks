@@ -43,8 +43,8 @@
   git: repo=https://github.com/electerious/Lychee.git
        dest={{ app_location }}/current
        version={{ lychee_version }}
-  sudo: yes
-  sudo_user: www-data
+  become: yes
+  become_user: www-data
   notify:
     - Symlink the shared directories
     - Modify permissions on uploads
