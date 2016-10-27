@@ -1,5 +1,5 @@
 - src: ANXS.mysql
-  version: v1.2.0
+  version: v1.2.1
 - src: jnv.unattended-upgrades
   version: v1.0.1
 - src: willshersystems.znc
