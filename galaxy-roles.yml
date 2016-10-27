@@ -5,8 +5,7 @@
 - src: willshersystems.znc
   version: 0.1.1
 - name: bertvv.samba
-  src: https://github.com/iangreenleaf/ansible-role-samba
-  version: master
+  version: v2.2.0
 - src: zzet.rbenv
   version: 2.1.9
 - src: nbz4live.php-fpm

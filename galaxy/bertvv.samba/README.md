@@ -1,40 +1,43 @@
 # Ansible role `bertvv.samba`
 
-An Ansible role for setting up Samba as a file server on CentOS/RHEL 7. Specifically, the responsibilities of this role are to:
+An Ansible role for setting up Samba as a file server on RedHat- or Debian-based linux distros. Specifically, the responsibilities of this role are to:
 
 - Install the necessary packages
-- Configure SELinux settings
+- Configure SELinux settings (when SELinux is active)
 - Create share directories
-- Manage users and passwords
+- Manage Samba users and passwords
 - Manage access to shares
 
-Setting the firewall is not a concern of this role, so you should configure this using another role (e.g. [bertvv.el7](https://galaxy.ansible.com/list#/roles/2305)).
+The following are not considered concerns of this role, and you should configure these using another role (e.g. [bertvv.el7](https://galaxy.ansible.com/bertvv/el7/):
+
+- Managing firewall settings.
+- Creating system users. Samba users should already exist as system users.
+
+**If you like/use this role, please consider giving it a star! Thanks!**
 
 ## Requirements
 
-- SELinux is expected to be running
-- Samba users should already exist as system users. You can take a look at role [bertvv.el7](https://galaxy.ansible.com/list#/roles/2305) that does all this and more.
+No specific requirements
 
 ## Role Variables
 
-Variables are not required, unless specified.
-
-| Variable                       | Default                  | Comments                                                             |
-| :---                           | :---                     | :---                                                                 |
-| `samba_create_varwww_symlinks` | false                    | When true, symlinks are created in `/var/www/html` to the shares.    |
-| `samba_load_homes`             | false                    | When true, user home directories are accessible.                     |
-| `samba_load_printers`          | false                    | When true, printers attached to the host are shared                  |
-| `samba_log`                    | -                        | Set the log file. If left undefined, logging is done through syslog. |
-| `samba_log_size`               | 5000                     | Set the maximum size of the log file.                                |
-| `samba_map_to_guest`           | `bad user`               | Behaviour when unregistered users access the shares.                 |
-| `samba_netbios_name`           | `{{ ansible_hostname }}` | The NetBIOS name of this server.                                     |
-| `samba_passdb_backend`         | `tdbsam`                 | Password database backend.                                           |
-| `samba_security`               | `user`                   | Samba security setting                                               |
-| `samba_server_string`          | `fileserver %m`          | Comment string for the server.                                       |
-| `samba_shares`                 | -                        | List of dicts containing share definitions. See below for details.   |
-| `samba_shares_root`            | `/srv/shares`            | Directories for the shares are created under this directory.         |
-| `samba_users`                  | -                        | List of dicts defining users that can access shares.                 |
-| `samba_workgroup`              | `WORKGROUP`              | Name of the server workgroup.                                        |
+| Variable                       | Default                  | Comments                                                              |
+| :---                           | :---                     | :---                                                                  |
+| `samba_create_varwww_symlinks` | false                    | When true, symlinks are created in `/var/www/html` to the shares.     |
+| `samba_interfaces`             | []                       | List of network interfaces used for browsing, name registration, etc. |
+| `samba_load_homes`             | false                    | When true, user home directories are accessible.                      |
+| `samba_load_printers`          | false                    | When true, printers attached to the host are shared                   |
+| `samba_log`                    | -                        | Set the log file. If left undefined, logging is done through syslog.  |
+| `samba_log_size`               | 5000                     | Set the maximum size of the log file.                                 |
+| `samba_map_to_guest`           | `bad user`               | Behaviour when unregistered users access the shares.                  |
+| `samba_netbios_name`           | `{{ ansible_hostname }}` | The NetBIOS name of this server.                                      |
+| `samba_passdb_backend`         | `tdbsam`                 | Password database backend.                                            |
+| `samba_security`               | `user`                   | Samba security setting                                                |
+| `samba_server_string`          | `fileserver %m`          | Comment string for the server.                                        |
+| `samba_shares`                 | []                       | List of dicts containing share definitions. See below for details.    |
+| `samba_shares_root`            | `/srv/shares`            | Directories for the shares are created under this directory.          |
+| `samba_users`                  | []                       | List of dicts defining users that can access shares.                  |
+| `samba_workgroup`              | `WORKGROUP`              | Name of the server workgroup.                                         |
 
 ### Defining users
 
@@ -50,9 +53,9 @@ samba_users:
     password: eilrahc
 ```
 
-Unfortunately, passwords have to be in plain text for now.
+Unfortunately, passwords have to be in plain text for now. Also, remark that this role will not change the password of an existing user.
 
-These users should already have an account on the host! Creating system users is not a concern of this role, so you should do this separately. A possibility is my role [bertvv.el7](https://galaxy.ansible.com/list#/roles/2305). An example:
+These users should already have an account on the host! Creating system users is not a concern of this role, so you should do this separately. A possibility is my role [bertvv.el7](https://galaxy.ansible.com/bertvv/el7/). An example:
 
 ```Yaml
 el7_users:
@@ -97,6 +100,7 @@ A complete overview of share options follows below. Only `name` is required, the
 | Option                 | Default | Comment                                                                                        |
 | :---                   | :---    | :---                                                                                           |
 | `name`                 | -       | The name of the share.                                                                         |
+| `path`                 | /{{samba_shares_root}}/{{name}}       | The path to the share directory.                                   |
 | `comment`              | -       | A comment string for the share                                                                 |
 | `public`               | `no`    | Controls read access for guest users                                                           |
 | `valid_users`          | -       | Controls read access for registered users. Use the syntax of the corresponding Samba setting.  |
@@ -115,41 +119,45 @@ No dependencies.
 
 ## Example Playbook
 
-See the [test playbook](tests/test.yml)
+See the [test playbook](https://github.com/bertvv/ansible-role-samba/blob/tests/test.yml)
 
 ## Testing
 
-The `tests` directory contains tests for this role in the form of a Vagrant environment.
+### Setting up the test environment
 
-- [`test.yml`](tests/test.yml) is a minimal playbook that only sets the NetBios name (the only required variable)
-- [`test-full.yml`](tests/test-full.yml) is a more complete playbook that applies most features of this role.
+Tests for this role are provided in the form of a Vagrant environment that is kept in a separate branch, `tests`. I use [git-worktree(1)](https://git-scm.com/docs/git-worktree) to include the test code into the working directory. Instructions for running the tests:
 
-The directory `tests/roles/samba` is a symbolic link that should point to the root of this project in order to work. To create it, do
+1. Fetch the tests branch: `git fetch origin tests`
+2. Create a Git worktree for the test code: `git worktree add tests tests` (remark: this requires at least Git v2.5.0). This will create a directory `tests/`.
+3. `cd tests/`
+4. `vagrant up` will then create test VMs for all supported distros and apply a test playbook (`test.yml`) to each one.
 
-```ShellSession
-$ cd tests/
-$ mkdir roles
-$ ln -frs ../../PROJECT_DIR roles/samba
+### Issues
+
+On Ubuntu 16.04, setting up the VM may fail while running the test playbook because a background process is running the package manager. The output looks like: 
+
+```
+...
+TASK [samba : Install Samba packages] ******************************************
+failed: [samba-ubuntu1604] (item=[u'samba-common', u'samba', u'samba-client']) => {"cache_update_time": 0, "cache_updated": false, "failed": true, "item": ["samba-common", "samba", "samba-client"], "msg": "'/usr/bin/apt-get -y -o \"Dpkg::Options::=--force-confdef\" -o \"Dpkg::Options::=--force-confold\"   install 'samba-common' 'samba' 'samba-client'' failed: E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)\nE: Unable to lock the administration directory (/var/lib/dpkg/), is another process using it?\n", "stderr": "E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)\nE: Unable to lock the administration directory (/var/lib/dpkg/), is another process using it?\n", "stdout": "", "stdout_lines": []}
 ```
 
-You may want to change the base box into one that you like. The current one is a base box I generated based on Box-Cutter's [CentOS Packer template](https://github.com/boxcutter/centos). It is shared on Atlas as [bertvv/centos71](https://atlas.hashicorp.com/bertvv/boxes/centos71/).
+The workaround is waiting a bit and running `vagrant provision` again.
 
 ## See also
 
 If you are looking for a Samba role for Debian or Ubuntu, take a look at this [comprehensive role](https://galaxy.ansible.com/list#/roles/1597) by Debops. Jeff Geerling also has written a [Samba role for EL](https://galaxy.ansible.com/list#/roles/438), but at the time of writing this, it is very basic.
 
-## Contributing
-
-Issues, feature requests, ideas are appreciated and can be posted in the Issues section. Pull requests are also very welcome.
-
 ## License
 
 BSD
 
-## Author Information
+## Contributors
 
-Bert Van Vreckem (bert.vanvreckem@gmail.com)
+Issues, feature requests, ideas are appreciated and can be posted in the Issues section. Pull requests are also very welcome.
 
-Contributions by:
-
-- [@birgitcroux](https://github.com/birgitcroux)
+- [Bert Van Vreckem](https://github.com/bertvv) (maintainer)
+- [Birgit Croux](https://github.com/birgitcroux)
+- [DarkStar1973](https://github.com/DarkStar1973)
+- [Ian Young](https://github.com/iangreenleaf)
+- [Jonas Heinrich](https://github.com/onny)

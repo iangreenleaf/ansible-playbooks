@@ -1,0 +1,21 @@
+# roles/samba/vars/os_RedHat.yml
+---
+
+samba_packages:
+  - samba-common
+  - samba
+  - samba-client
+
+samba_selinux_packages:
+  - libsemanage-python
+
+samba_selinux_booleans:
+  - samba_enable_home_dirs
+  - samba_export_all_rw
+
+samba_configuration: /etc/samba/smb.conf
+
+samba_service: smb
+winbind_service: nmb
+
+samba_www_documentroot: /var/www/html
