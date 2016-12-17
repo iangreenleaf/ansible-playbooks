@@ -1,7 +1,6 @@
 ---
 - name: rbenv rehash
-  shell: rbenv rehash
-  environment: "{{ruby_env}}"
+  shell: bash -lc "rbenv rehash"
 
 - name: source rbenv config file
   shell: . /etc/profile.d/rbenv.sh

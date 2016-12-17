@@ -12,8 +12,8 @@
 - meta: flush_handlers
 
 - name: install bundler
-  # Sigh, tough to get the env right on this
-  #gem: name=bundler state=latest
-  shell: gem install bundler
+  shell: bash -lc "gem install bundler"
   notify: rbenv rehash
-  environment: "{{ruby_env}}"
+
+# Rehash right away
+- meta: flush_handlers
