@@ -7,7 +7,7 @@
 - name: bertvv.samba
   version: v2.2.0
 - src: zzet.rbenv
-  version: 2.2.6
+  version: 2.2.8
 - src: nbz4live.php-fpm
   version: 0.2.12
 - src: andreaswolf.letsencrypt

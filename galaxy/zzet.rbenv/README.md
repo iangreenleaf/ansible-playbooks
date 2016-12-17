@@ -21,7 +21,7 @@ Default variables are:
     rbenv:
       env: system
       version: v1.0.0
-      ruby_version: 2.3.1
+      ruby_version: 2.3.3
 
     rbenv_repo: "https://github.com/rbenv/rbenv.git"
 
@@ -32,7 +32,7 @@ Default variables are:
 
       - { name: "ruby-build",
           repo: "https://github.com/rbenv/ruby-build.git",
-          version: "v20160426" }
+          version: "master" }
 
       - { name: "rbenv-default-gems",
           repo: "https://github.com/rbenv/rbenv-default-gems.git",
@@ -75,6 +75,7 @@ Description:
 - ` default_gems_file ` - This is Rbenv's plugin _rbenv-default-gems_. Sets the path to a default-gems file of your choice (_don't set it_ if you want to use the default file `files/default-gems`)
 - ` rbenv_owner ` - The user  owning `rbenv_root` when `rbenv.env` is `system`
 - ` rbenv_group ` - The group owning `rbenv_root` when `rbenv.env` is `system`
+- ` rbenv_tmpdir ` - A temporary directory path used for artifacts when installing rubies. Defaults to system's `$TMPDIR`
 
 Example:
 
