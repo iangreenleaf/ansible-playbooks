@@ -7,7 +7,31 @@
     - common
     - firewall
     - deploy-user
+    - role: galaxy/zzet.rbenv
+      rbenv:
+        env: system
+        version: v1.0.0
+        rbenv_root: /usr/local/rbenv
+        ruby_version: "{{ruby_version}}"
     - rbenv
     - nginx
     - nginx-passenger
     - tracks-app
+    - role: galaxy/carlosbuenosvinos.ansistrano-deploy
+      become: yes
+      become_user: www-data
+      ansistrano_deploy_from: "{{ playbook_dir }}" # Where my local project is (relative or absolute path)
+      ansistrano_deploy_to: "/var/www/tracks-app"
+      ansistrano_version_dir: "releases"
+      ansistrano_current_dir: "current"
+      ansistrano_current_via: "symlink"
+      ansistrano_shared_paths: ["bundle", "log", "tmp"]
+      ansistrano_shared_files: ["config/site.yml", "config/database.yml"]
+      ansistrano_keep_releases: 4
+      ansistrano_deploy_via: "git"
+      ansistrano_allow_anonymous_stats: yes
+      ansistrano_git_repo: https://github.com/TracksApp/tracks.git
+      ansistrano_git_branch: d99f7f3f8fd5233846435624ae78e74b80e0d90b
+      ansistrano_after_setup_tasks_file: "{{ playbook_dir }}/roles/tracks-app/hooks/after-setup.yml"
+      ansistrano_after_symlink_shared_tasks_file: "{{ playbook_dir }}/roles/tracks-app/hooks/after-symlink-shared.yml"
+      ansistrano_after_symlink_tasks_file: "{{ playbook_dir }}/roles/tracks-app/hooks/after-symlink.yml"

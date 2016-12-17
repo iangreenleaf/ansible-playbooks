@@ -1,0 +1,6 @@
+---
+- name: set up the application config
+  template: src=roles/tracks-app/templates/site.yml.j2 dest={{ ansistrano_shared_path.stdout }}/config/site.yml
+
+- name: set up the database config
+  template: src=roles/tracks-app/templates/database.yml.j2 dest={{ ansistrano_shared_path.stdout }}/config/database.yml

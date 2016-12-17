@@ -2,51 +2,11 @@
 - name: Restart Nginx with updated vhost configuration
   action: service name=nginx state=restarted
 
-- name: Remove the log directory
-  file: path={{ app_location }}/current/log
-        state=absent
-
-- name: Symlink the log directory to the shared location
-  file: path={{ app_location }}/current/log
-        src={{ app_location }}/shared/log
-        state=link
-        force=yes
-  become: yes
-  become_user: www-data
-
-- name: Symlink the tmp directory to the shared location
-  file: path={{ app_location }}/current/tmp
-        src={{ app_location }}/shared/tmp
-        state=link
-        force=yes
-  become: yes
-  become_user: www-data
-
 - name: Initialize the database
   shell: "{{ruby_bin}}/rake db:setup
          chdir={{ app_location }}/current"
   environment:
     RAILS_ENV: production
 
-- name: Migrate the database
-  shell: "{{ruby_bin}}/rake db:migrate
-         chdir={{ app_location }}/current"
-  environment:
-    RAILS_ENV: production
-
-- name: Precompile assets
-  shell: "{{ruby_bin}}/rake assets:precompile
-         chdir={{ app_location }}/current"
-  environment:
-    RAILS_ENV: production
-
 - name: restart mysql
   action: service name=mysql enabled=yes state=restarted
-
-#TODO do this natively, I think
-- name: restart tracks
-  command: "{{ item }}"
-  become: yes
-  become_user: www-data
-  with_items:
-    - touch {{ app_location }}/current/tmp/restart.txt

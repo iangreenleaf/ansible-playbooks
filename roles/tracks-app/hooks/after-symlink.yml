@@ -1,0 +1,7 @@
+---
+- name: Restart Tracks
+  command: "{{ item }}"
+  become: yes
+  become_user: www-data
+  with_items:
+    - touch {{ app_location }}/current/tmp/restart.txt
