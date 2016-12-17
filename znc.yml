@@ -7,7 +7,7 @@
     - common
     - role: firewall
       extra_ports:
-        - 6667
+        - 6697
     - nginx
     - role: nginx-letsencrypt
       name: znc
@@ -33,5 +33,5 @@
       znc_user_nick: iangreenleaf
       znc_user_realname: Ian Young
       znc_user_buffer: 1000
-      znc_port: 6667
+      znc_port: 6697
       znc_ssl: true
