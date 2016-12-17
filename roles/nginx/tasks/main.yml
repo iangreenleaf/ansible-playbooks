@@ -4,7 +4,7 @@
            id=561F9B9CAC40B2F7
 
 - name: Use Phusion APT repo
-  apt_repository: repo='deb https://oss-binaries.phusionpassenger.com/apt/passenger precise main'
+  apt_repository: repo="deb https://oss-binaries.phusionpassenger.com/apt/passenger {{ ansible_distribution_release }} main"
 
 - name: Install Passenger + Nginx
   apt: pkg=nginx-extras
