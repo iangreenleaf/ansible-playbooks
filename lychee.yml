@@ -8,6 +8,7 @@
     - common
     - firewall
     - deploy-user
+    - webserver-common
     - role: php-latest
       php_version: "5.5"
     - role: galaxy/nbz4live.php-fpm

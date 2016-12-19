@@ -1,0 +1,8 @@
+---
+- name: Ensure webserver path exists with permissions
+  file: path={{ webserver_path }}
+        state=directory
+        group={{ webserver_group }}
+        owner={{ webserver_user }}
+        mode=ug=rwx,o=rx
+  become: yes

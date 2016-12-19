@@ -1,0 +1,3 @@
+webserver_path: /var/www
+webserver_user: www-data
+webserver_group: www-data
