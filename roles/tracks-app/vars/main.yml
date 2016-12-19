@@ -1,4 +1,4 @@
 ---
-app_location: "/var/www/tracks"
+app_location: "/var/www/tracks-app"
 ruby_version: 1.9.3-p385
 domain: tracks.iangreenleaf.com

@@ -21,7 +21,7 @@
       become: yes
       become_user: www-data
       ansistrano_deploy_from: "{{ playbook_dir }}" # Where my local project is (relative or absolute path)
-      ansistrano_deploy_to: "/var/www/tracks-app"
+      ansistrano_deploy_to: "{{app_location}}"
       ansistrano_version_dir: "releases"
       ansistrano_current_dir: "current"
       ansistrano_current_via: "symlink"
