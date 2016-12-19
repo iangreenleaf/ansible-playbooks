@@ -1,7 +1,3 @@
 ---
 - name: Restart Tracks
-  command: "{{ item }}"
-  become: yes
-  become_user: www-data
-  with_items:
-    - touch {{ app_location }}/current/tmp/restart.txt
+  command: "passenger-config restart-app --ignore-passenger-not-running --ignore-app-not-running {{ ansistrano_release_path.stdout }}"
