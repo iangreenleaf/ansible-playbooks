@@ -4,8 +4,8 @@
             dest={{ ansistrano_release_path.stdout }}/.ruby-version
 
 - name: Install the bundle
-  shell: 'bash -lc "bundle install --deployment --path {{ ansistrano_shared_path.stdout }}/bundle"
-         chdir={{ ansistrano_release_path.stdout }}'
+  shell: "bash -lc 'bundle install --deployment --path {{ ansistrano_shared_path.stdout }}/bundle'
+         chdir={{ ansistrano_release_path.stdout }}"
   notify:
     - rbenv rehash
 
@@ -16,7 +16,7 @@
     RAILS_ENV: production
 
 - name: Migrate the database
-  shell: "rake db:migrate
+  shell: "bash -lc 'rake db:migrate'
          chdir={{ ansistrano_release_path.stdout }}"
   environment:
     RAILS_ENV: production
