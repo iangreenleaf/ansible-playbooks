@@ -10,13 +10,13 @@
     - rbenv rehash
 
 - name: Precompile assets
-  shell: "bash -lc 'rake assets:precompile'
+  shell: "bash -lc 'bundle exec rake assets:precompile'
          chdir={{ ansistrano_release_path.stdout }}"
   environment:
     RAILS_ENV: production
 
 - name: Migrate the database
-  shell: "bash -lc 'rake db:migrate'
+  shell: "bash -lc 'bundle exec rake db:migrate'
          chdir={{ ansistrano_release_path.stdout }}"
   environment:
     RAILS_ENV: production
