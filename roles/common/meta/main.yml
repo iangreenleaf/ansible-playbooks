@@ -3,3 +3,8 @@ dependencies:
   - role: galaxy/jnv.unattended-upgrades
     unattended_minimal_steps: true
     unattended_mail: "{{ server_maint_email }}"
+  - role: galaxy/kamaln7.swapfile
+    swapfile_size: 1GB
+    swapfile_location: /swapfile
+    swapfile_swappiness: 10
+    when: swapfile

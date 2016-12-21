@@ -16,3 +16,6 @@
   version: 1.11.0
 - src: carlosbuenosvinos.ansistrano-rollback
   version: 1.5.0
+- name: kamaln7.swapfile
+  src: https://github.com/iangreenleaf/ansible-swapfile
+  version: master
