@@ -2,7 +2,7 @@
 - hosts: digitalocean-2
   user: root
   vars:
-    app_domain: testphotos.youngram.com
+    app_domain: photos.youngram.com
   vars_files:
     - secrets.yml
   roles:
