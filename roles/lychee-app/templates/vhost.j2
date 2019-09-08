@@ -33,6 +33,6 @@ server {
     # fastcgi_param  SCRIPT_FILENAME   $document_root$fastcgi_script_name;
   }
 
-  access_log {{ app_location }}/shared/log/nginx-access.log;
-  error_log  {{ app_location }}/shared/log/nginx-error.log;
+  access_log {{ app_location }}/log/nginx-access.log;
+  error_log  {{ app_location }}/log/nginx-error.log;
 }

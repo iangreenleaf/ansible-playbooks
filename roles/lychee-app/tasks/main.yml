@@ -25,13 +25,8 @@
         state=directory
   with_items:
     - "{{ app_location }}"
-    - "{{ app_location }}/shared"
-    - "{{ app_location }}/shared/log"
-    - "{{ app_location }}/shared/data"
-    - "{{ app_location }}/shared/uploads"
     - "{{ app_location }}/current"
-  notify:
-    - Modify permissions on uploads
+    - "{{ app_location }}/log"
 
 - name: Check out the latest revision of the codebase
   git: repo=https://github.com/electerious/Lychee.git
@@ -40,11 +35,9 @@
   become: yes
   become_user: www-data
   notify:
-    - Symlink the shared directories
-    - Modify permissions on uploads
     - restart php-fpm
 
 - name: Generate the database config
   template: src=data-config.php.j2
-            dest={{app_location}}/shared/data/config.php
+            dest={{app_location}}/current/data/config.php
             mode=755
