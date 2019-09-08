@@ -1,3 +1,0 @@
----
-- name: Restart Tracks
-  command: "passenger-config restart-app --ignore-passenger-not-running --ignore-app-not-running {{ ansistrano_release_path.stdout }}"

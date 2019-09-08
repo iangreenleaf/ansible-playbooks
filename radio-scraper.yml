@@ -1,7 +1,0 @@
----
-- hosts: digitalocean
-  user: root
-  roles:
-    - common
-    - deploy-user
-    - radio-scraper

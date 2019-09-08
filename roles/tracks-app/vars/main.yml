@@ -1,5 +1,0 @@
----
-app_location: "/var/www/tracks-app"
-ruby_version: 2.3.3
-tracks_revision: 1ba829e9607b2622c2a5dc8177111f66c290d813
-domain: tracks.iangreenleaf.com
