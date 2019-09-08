@@ -1,0 +1,7 @@
+server {
+  listen 80;
+  listen [::]:80;
+  listen 443 ssl http2;
+  server_name {{from}};
+  return 301 $scheme://{{to}}$request_uri;
+}

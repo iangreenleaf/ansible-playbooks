@@ -11,6 +11,9 @@
     - deploy-user
     - webserver-common
     - nginx
+    - role: nginx-redirect-domain
+      from: lychee.iangreenleaf.com
+      to: "{{ app_domain }}"
     - role: galaxy/geerlingguy.certbot
       certbot_admin_email: dev@iangreenleaf.com
       certbot_create_method: standalone

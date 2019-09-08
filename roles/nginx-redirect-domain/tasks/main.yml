@@ -1,0 +1,16 @@
+---
+- name: Generate the virtual host
+  template: src=vhost.j2
+            dest=/etc/nginx/sites-available/redirect-{{from}}
+            mode=755
+  notify:
+    - Restart Nginx
+    - restart php-fpm
+
+- name: Enable the virtual host
+  file: path=/etc/nginx/sites-enabled/redirect-{{from}}
+        src=/etc/nginx/sites-available/redirect-{{from}}
+        state=link
+  notify:
+    - Restart Nginx
+    - restart php-fpm
