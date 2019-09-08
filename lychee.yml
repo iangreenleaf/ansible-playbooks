@@ -38,13 +38,14 @@
       php_upload_max_filesize: "64M"
       php_max_file_uploads: "300"
     - role: galaxy/geerlingguy.mysql
+      mysql_root_password: "{{ root_dbpassword }}"
       mysql_databases:
         - name: lychee
           collation: "utf8_general_ci"
           encoding: "utf8"
       mysql_users:
         - name: lychee
-          password: "4CMepo*NSaN9&m0e"
+          password: "{{ lychee_dbpassword }}"
           priv: "lychee.*:ALL"
           host: "localhost"
     - role: lychee-app
