@@ -14,16 +14,15 @@
     path: '{{ acme_tiny_data_directory }}/csrs'
     state: directory
 
-- name: create group
-  group:
-    name: '{{ letsencrypt_group }}'
-    system: yes
-
 - name: create user
   user:
     name: '{{ letsencrypt_user }}'
-    group: '{{ letsencrypt_group }}'
     home: '{{ acme_tiny_data_directory }}'
+    system: yes
+
+- name: create group
+  group:
+    name: '{{ letsencrypt_group }}'
     system: yes
 
 - name: create certs directory
@@ -123,7 +122,7 @@
     openssl genrsa 4096 > {{ item.keypath }}
   args:
     creates: "{{ item.keypath }}"
-  with_items: "{{ letsencrypt_certs }}"
+  with_items: letsencrypt_certs
   tags: ['letsencrypt_keys']
 
 # todo this leaves a very very tiny timeframe where the keys are potentially not secured; this is only relevant if the
@@ -133,7 +132,7 @@
     path={{ item.keypath }}
     owner={{ item.key_owner|default(letsencrypt_default_key_owner) }} group={{ item.key_group|default(letsencrypt_default_key_group) }}
     mode={{ item.key_permissions|default(letsencrypt_default_key_permissions) }}
-  with_items: "{{ letsencrypt_certs }}"
+  with_items: letsencrypt_certs
   tags: ['letsencrypt_keys']
 
 - name: generate csrs for single domain keys
@@ -142,7 +141,7 @@
   args:
     creates: "{{ acme_tiny_data_directory }}/csrs/{{ item.name }}.csr"
   when: item.host is string
-  with_items: "{{ letsencrypt_certs }}"
+  with_items: letsencrypt_certs
   tags: ['letsencrypt_keys']
 
 - name: generate csrs for multi domain keys
@@ -152,10 +151,10 @@
     executable: "/bin/bash"
     creates: "{{ acme_tiny_data_directory }}/csrs/{{ item.name }}.csr"
   when: item.host is not string
-  with_items: "{{ letsencrypt_certs }}"
+  with_items: letsencrypt_certs
   tags: ['letsencrypt_keys']
 
-- name: generate the initial certificates
+- name: generate the initial certificate
   command: ./renew-certs.py
   args:
     chdir: "{{ acme_tiny_data_directory }}"
@@ -164,6 +163,14 @@
   failed_when: (generate_initial_cert.stdout is defined and
     ('error' in generate_initial_cert.stdout or 'Error' in generate_initial_cert.stdout
       or 'Error' in generate_initial_cert.stderr))
+  tags: ['letsencrypt_keys']
+
+- name: generated chained certificates
+  shell: cat {{ item.certpath }} {{ letsencrypt_intermediate_cert_path }} > {{ item.chainedcertpath }}
+  args:
+    creates: "{{ item.chainedcertpath }}"
+  when: item.chainedcertpath is defined
+  with_items: letsencrypt_certs
   tags: ['letsencrypt_keys']
 
 #################################################

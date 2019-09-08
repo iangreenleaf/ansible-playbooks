@@ -1,12 +1,6 @@
 ---
 - name: Install imagemagick
-  apt: pkg=php5-imagick state=present
-
-- name: Create the socket directory
-  file: path=/var/run/php-fpm
-        owner=www-data
-        group=www-data
-        state=directory
+  apt: pkg=php-imagick state=present
 
 - name: Generate the virtual host
   template: src=vhost.j2

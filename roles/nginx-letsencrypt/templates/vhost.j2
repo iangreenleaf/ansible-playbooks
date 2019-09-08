@@ -3,6 +3,6 @@ server {
   server_name {{domain}};
 
   location /.well-known/acme-challenge/ {
-    alias {{ challenge_dir }}/;
+    alias {{ challenge_dir }}/.well-known/acme-challenge/;
   }
 }

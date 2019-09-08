@@ -19,6 +19,10 @@
     - sites-available
     - sites-enabled
 
+- name: Remove default Nginx server
+  file: path=/etc/nginx/sites-enabled/default
+        state=absent
+
 - name: Set up log rotation for Nginx
   copy: src=logrotate
         dest=/etc/logrotate.d/nginx

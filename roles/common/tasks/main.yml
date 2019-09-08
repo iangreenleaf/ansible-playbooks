@@ -3,9 +3,6 @@
   apt: upgrade=safe
        update_cache=yes
 
-- name: Help apt do HTTPS
-  apt: pkg=apt-transport-https
-
 - name: Install git
   apt: pkg=git
 
@@ -19,10 +16,7 @@
   apt: pkg=screen
 
 - name: Install prerequisite packages that are necessary to compile applications
-  apt: pkg={{ item }}
-  with_items:
-    - autoconf
-    - build-essential
-
-- name: Install python-software-properties so the apt_repository module will work properly
-  apt: pkg=python-software-properties
+  apt:
+    pkg:
+      - autoconf
+      - build-essential
