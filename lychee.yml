@@ -11,18 +11,13 @@
     - deploy-user
     - webserver-common
     - nginx
-    - role: nginx-letsencrypt
-      domain: "{{ app_domain }}"
-      challenge_dir: /var/www/letsencrypt/lychee
     - role: galaxy/geerlingguy.certbot
       certbot_admin_email: dev@iangreenleaf.com
       certbot_create_method: standalone
-      certbot_create_standalone_stop_services: []
       certbot_create_if_missing: yes
       certbot_certs:
         - domains:
           - "{{ app_domain }}"
-      certbot_create_command: "{{ certbot_script }} certonly --webroot --noninteractive --agree-tos --email {{ cert_item.email | default(certbot_admin_email) }} -w /var/www/letsencrypt/lychee -d {{ cert_item.domains | join(',') }}"
     - role: galaxy/geerlingguy.php
       php_packages_extra:
         - php-gd
