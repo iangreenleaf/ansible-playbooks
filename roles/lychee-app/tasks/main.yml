@@ -29,7 +29,7 @@
     - "{{ app_location }}/log"
 
 - name: Check out the latest revision of the codebase
-  git: repo=https://github.com/electerious/Lychee.git
+  git: repo=https://github.com/LycheeOrg/Lychee.git
        dest={{ app_location }}/current
        version={{ lychee_version }}
   become: yes
