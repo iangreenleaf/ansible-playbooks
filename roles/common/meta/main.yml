@@ -5,5 +5,5 @@ dependencies:
     unattended_mail: "{{ server_maint_email }}"
   - role: galaxy/oefenweb.swapfile
     swapfile_size: 1GB
-    swapfile_swappiness: 10
+    swapfile_swappiness: "10"
     when: swapfile
