@@ -3,8 +3,8 @@
   action: service name=nginx state=restarted
 
 - name: Symlink the shared directories
-  file: path={{ app_location }}/current/log
-        src={{ app_location }}/shared/log
+  file: path={{ app_location }}/current/{{ item }}
+        src={{ app_location }}/shared/{{ item }}
         state=link
         force=yes
   become: yes
@@ -13,6 +13,7 @@
     - log
     - uploads
     - data
+    - tmp
 
 - name: Modify permissions on uploads
   file: path={{ app_location }}/shared/{{ item }}
@@ -21,6 +22,7 @@
   with_items:
     - uploads
     - uploads/thumb
+    - uploads/medium
     - uploads/big
     - uploads/import
     - data
