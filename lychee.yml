@@ -11,6 +11,7 @@
     - deploy-user
     - webserver-common
     - nginx
+    - nginx-letsencrypt
     - role: nginx-redirect-domain
       from: lychee.iangreenleaf.com
       to: "{{ app_domain }}"
@@ -18,6 +19,9 @@
       certbot_admin_email: dev@iangreenleaf.com
       certbot_create_method: standalone
       certbot_create_if_missing: yes
+      certbot_create_standalone_stop_services:
+        - nginx
+      certbot_auto_renew_options: "--quiet --no-self-upgrade --nginx"
       certbot_certs:
         - domains:
           - "{{ app_domain }}"

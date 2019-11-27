@@ -1,8 +1,0 @@
-server {
-  listen 80;
-  server_name {{domain}};
-
-  location /.well-known/acme-challenge/ {
-    alias {{ challenge_dir }}/.well-known/acme-challenge/;
-  }
-}

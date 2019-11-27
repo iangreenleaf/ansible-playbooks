@@ -1,28 +1,11 @@
 ---
-- name: Ensure the challenge directory exists
-  file: path={{ challenge_dir }}
-        state=directory
 
-- name: Ensure the Nginx vhost directories exist
-  file: path=/etc/nginx/{{ item }}
-        state=directory
-  with_items:
-    - sites-available
-    - sites-enabled
+- name: Add apt repository
+  apt_repository:
+    repo: "ppa:certbot/certbot"
+    state: present
 
-- name: Generate the virtual host
-  template: src=vhost.j2
-            dest=/etc/nginx/sites-available/letsencrypt-{{ domain }}
-            mode=755
-  notify:
-    - Restart Nginx
-
-- name: Enable the virtual host
-  file: path=/etc/nginx/sites-enabled/letsencrypt-{{ domain }}
-        src=/etc/nginx/sites-available/letsencrypt-{{ domain }}
-        state=link
-  notify:
-    - Restart Nginx
-
-# Restart nginx now before continuing
-- meta: flush_handlers
+- name: Install certbot nginx plugin
+  package:
+    name: "python-certbot-nginx"
+    state: present
